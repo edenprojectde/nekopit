@@ -1,0 +1,5 @@
+--dce full
+--js bin/server.js
+--xml docs/structure.js.xml
+--main Main
+

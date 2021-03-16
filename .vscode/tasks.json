@@ -1,0 +1,25 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "mybuild-haxe",
+      "type": "shell",
+      "command": "haxe ${workspaceFolder}/server.js.hxml",
+      "problemMatcher": []
+    },
+    {
+      "label": "launch-node",
+      "type": "shell",
+      "command": "node ./bin/server.js",
+    },
+    {
+      "label": "launch-hashlink",
+      "type": "shell",
+      
+      "command": "hl ${workspaceFolder}/bin/server.hl",
+    }
+
+  ]
+}

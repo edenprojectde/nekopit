@@ -1,0 +1,4 @@
+--dce full
+--hl bin/server.hl
+--xml docs/structure.hl.xml
+--main Main

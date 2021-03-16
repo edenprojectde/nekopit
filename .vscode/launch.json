@@ -1,0 +1,23 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "command": "${workspaceFolder}/buildscripts/build-and-run-hl.sh",
+      "name": "Build & Run HashLink",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+
+    {
+      "command": "${workspaceFolder}/buildscripts/build-and-run-js.sh",
+      "name": "Build & Run JS",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+    
+  ]
+}

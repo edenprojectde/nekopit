@@ -1,0 +1,3 @@
+--dce full
+--hl bin/server.c
+--main Main

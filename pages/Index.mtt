@@ -1,0 +1,24 @@
+<html>
+  <head>
+    
+  </head>
+  <body>
+    <div>
+      <p>Hello Template!</p><br>
+      <ul>
+        ::foreach data.h.People::
+        <li>
+        ::firstname::
+        </li>
+        ::end::
+      </ul> <br>
+      <ul>
+        ::foreach data.h.People::
+        <li>
+        ::id::
+        </li>
+        ::end::
+      </ul><br>
+    </div>
+  </body>
+</html>
