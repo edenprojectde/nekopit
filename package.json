@@ -5,8 +5,8 @@
   "version": "1.0.0",
   "main": "./bin/server.js",
   "bin": {
-    "nekopit": "./misc/launchable.js",
-    "hashpit": "./misc/launchable.sh"
+    "nekopit": "misc/launchable.js",
+    "hashpit": "misc/launchable.sh"
   },
   "dependencies": {
     "express": "^4.17.1",
