@@ -75,7 +75,7 @@ Main.main = function() {
 	myServer.autoRegisterPages([new pages_IndexPage()]);
 	myServer.generateFiles();
 	myServer.listen(3001,function() {
-		console.log("Main.hx:15:","Server started");
+		console.log("Main.hx:16:","Server started");
 	});
 };
 Math.__name__ = true;
@@ -1272,13 +1272,14 @@ var lib_bases_AbstractPage = function() {
 };
 lib_bases_AbstractPage.__name__ = true;
 var lib_bases_BasePage = function() {
+	this.HTMLHeader = ["<meta charset=\"UTF-8\">","<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">","<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"];
 	lib_bases_AbstractPage.call(this);
 };
 lib_bases_BasePage.__name__ = true;
 lib_bases_BasePage.__super__ = lib_bases_AbstractPage;
 lib_bases_BasePage.prototype = $extend(lib_bases_AbstractPage.prototype,{
 	GenerateHTML: function() {
-		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "lib/bases/BasePage.hx", lineNumber : 33, className : "lib.bases.BasePage", methodName : "GenerateHTML"});
+		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "lib/bases/BasePage.hx", lineNumber : 42, className : "lib.bases.BasePage", methodName : "GenerateHTML"});
 	}
 	,WriteToDisk: function() {
 		var fs = require("fs-extra");
@@ -1288,18 +1289,48 @@ lib_bases_BasePage.prototype = $extend(lib_bases_AbstractPage.prototype,{
 		}
 	}
 });
+var lib_bases_StaticFileGeneratedPage = function() {
+	lib_bases_BasePage.call(this);
+};
+lib_bases_StaticFileGeneratedPage.__name__ = true;
+lib_bases_StaticFileGeneratedPage.__super__ = lib_bases_BasePage;
+lib_bases_StaticFileGeneratedPage.prototype = $extend(lib_bases_BasePage.prototype,{
+	GenerateHTML: function() {
+		try {
+			return util_Minimize.HTML(this.GenerateTemplate().execute({ headers : this.HTMLHeader}));
+		} catch( _g ) {
+			var e = haxe_Exception.caught(_g);
+			try {
+				return this.GenerateTemplate().execute({ });
+			} catch( _g1 ) {
+				return util_Minimize.HTML("\n          <div> No Data in this Element <br> Maybe we also got a problem:\n          <pre style='width:400px; white-space: normal;'>\n            " + e.toString() + "<br>\n            " + e.get_message() + "<br>\n            " + haxe_CallStack.toString(e.get_stack()) + "\n          </pre></div>\n        ");
+			}
+		}
+	}
+	,GenerateTemplate: function() {
+		if(this.TemplateFile != null) {
+			var content = this.ReadTemplateFromDisk();
+			return new haxe_Template(content.toString());
+		}
+		throw new haxe_Exception("Can not generate HTML");
+	}
+	,ReadTemplateFromDisk: function() {
+		var fs = require("fs-extra");
+		return fs.readFileSync(this.TemplateFile);
+	}
+});
 var lib_bases_ApiPage = function() {
 	this.Data = new haxe_ds_StringMap();
-	lib_bases_BasePage.call(this);
+	lib_bases_StaticFileGeneratedPage.call(this);
 	this.GenerateMode = lib_bases_GenerateMode.GenerateSingleton;
 	this.GatherData();
 };
 lib_bases_ApiPage.__name__ = true;
-lib_bases_ApiPage.__super__ = lib_bases_BasePage;
-lib_bases_ApiPage.prototype = $extend(lib_bases_BasePage.prototype,{
+lib_bases_ApiPage.__super__ = lib_bases_StaticFileGeneratedPage;
+lib_bases_ApiPage.prototype = $extend(lib_bases_StaticFileGeneratedPage.prototype,{
 	GenerateHTML: function() {
 		try {
-			return util_Minimize.HTML(this.GenerateTemplate().execute({ data : this.Data}));
+			return util_Minimize.HTML(this.GenerateTemplate().execute({ data : this.Data, headers : this.HTMLHeader}));
 		} catch( _g ) {
 			var e = haxe_Exception.caught(_g);
 			try {
@@ -1309,14 +1340,8 @@ lib_bases_ApiPage.prototype = $extend(lib_bases_BasePage.prototype,{
 			}
 		}
 	}
-	,GenerateTemplate: function() {
-		if(this.TemplateFile != null) {
-			return new haxe_Template(this.ReadTemplateFromDisk());
-		}
-		throw new haxe_Exception("Can not generate HTML");
-	}
 	,GatherData: function() {
-		console.log("lib/bases/BasePage.hx:109:","Trying.. " + (this.APIPath == null ? "null" : haxe_ds_StringMap.stringify(this.APIPath.h)));
+		console.log("lib/bases/BasePage.hx:156:","Trying.. " + (this.APIPath == null ? "null" : haxe_ds_StringMap.stringify(this.APIPath.h)));
 		var h = this.APIPath.h;
 		var _g_h = h;
 		var _g_keys = Object.keys(h);
@@ -1332,10 +1357,6 @@ lib_bases_ApiPage.prototype = $extend(lib_bases_BasePage.prototype,{
 			var v = request;
 			this.Data.h[key1] = v;
 		}
-	}
-	,ReadTemplateFromDisk: function() {
-		var fs = require("fs-extra");
-		return fs.readFileSync(this.TemplateFile);
 	}
 });
 var lib_bases_GenerateMode = $hxEnums["lib.bases.GenerateMode"] = { __ename__:true,__constructs__:null
