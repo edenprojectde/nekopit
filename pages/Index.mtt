@@ -1,6 +1,8 @@
 <html>
   <head>
-    
+    ::foreach headers::
+      ::__current__::
+    ::end::
   </head>
   <body>
     <div>

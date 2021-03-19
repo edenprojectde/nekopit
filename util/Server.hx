@@ -70,6 +70,13 @@ class ServingServer implements IServer {
     #end
   }
 
+  public function addStaticFolder(method:String, path:String, callback:(req:Dynamic, res:Dynamic) -> Void) {
+    #if js
+      
+      
+    #end
+  }
+
 	public function generateFiles() {
     for (index => value in Pages) {
       //if()

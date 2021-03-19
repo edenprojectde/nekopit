@@ -1,5 +1,6 @@
 package lib.bases;
 
+import js.html.webgl.Buffer;
 import haxe.Exception;
 import pieces.DebugPiece;
 import util.Minimize;
@@ -8,6 +9,7 @@ import util.Request;
 
 abstract class AbstractPage {
   public var DynamicPath: String;
+  
   public var BasePath = ".";
   public var FilePath: Null<String>;
   public var Template="<div>Empty</div>";
@@ -28,7 +30,14 @@ abstract class AbstractPage {
   public abstract function WriteToDisk(): Void;
 }
 
+
 class BasePage extends AbstractPage {
+  public var HTMLHeader : Array<String> = [
+    '<meta charset="UTF-8">',
+    '<meta http-equiv="X-UA-Compatible" content="IE=edge">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+  ];
+
 	public function GenerateHTML():Null<String> {
     throw new haxe.exceptions.NotImplementedException();
 	}
@@ -67,17 +76,62 @@ class BasePage extends AbstractPage {
   }
 }
 
-class ApiPage extends BasePage implements IAPI {
+class StaticFileGeneratedPage extends BasePage{
+	override public function GenerateHTML() { 
+    try
+    {
+      return Minimize.HTML(this.GenerateTemplate().execute({headers:HTMLHeader}));
+    } //  + new DebugPiece({data:Data}).generateHTML()
+    catch (e) {
+      try {
+        return this.GenerateTemplate().execute({});
+      } catch(e2) {
+        return Minimize.HTML("
+          <div> No Data in this Element <br> Maybe we also got a problem:
+          <pre style='width:400px; white-space: normal;'>
+            "+e.toString()+"<br>
+            "+e.message+"<br>
+            "+e.stack.toString()+"
+          </pre></div>
+        ");
+      }
+      
+    }
+  }
+
+	public override function GenerateTemplate():Template {
+    try {
+		  if(TemplateFile != null) {
+        var content = ReadTemplateFromDisk();
+
+        return new haxe.Template(content.toString());
+      }
+    }
+    throw new Exception("Can not generate HTML");
+	}
+  override public function ReadTemplateFromDisk() : String {
+    #if js
+      var fs:Dynamic = js.Lib.require('fs-extra');
+
+      return fs.readFileSync(TemplateFile); // POSSIBLE PROBLEM, could not return String if file does not exist
+    #end
+    #if hl
+
+    #end
+  }
+}
+
+class ApiPage extends StaticFileGeneratedPage implements IAPI {
   public function new() {
     super();
     this.GenerateMode = GenerateSingleton;
     this.GatherData();
   }
 
-	override public function GenerateHTML() { 
+  override public function GenerateHTML() { 
     try
     {
-      return Minimize.HTML(this.GenerateTemplate().execute({data:Data}));
+      return Minimize.HTML(this.GenerateTemplate().execute({data:Data, headers:HTMLHeader}));
     } //  + new DebugPiece({data:Data}).generateHTML()
     catch (e) {
       try {
@@ -96,13 +150,6 @@ class ApiPage extends BasePage implements IAPI {
     }
   }
 
-	public override function GenerateTemplate():Template {
-		if(TemplateFile != null) {
-      return new haxe.Template(ReadTemplateFromDisk());
-    }
-    throw new Exception("Can not generate HTML");
-	}
-
 	public var APIPath:Map<String,String>;
 
 	public function GatherData() {
@@ -118,16 +165,6 @@ class ApiPage extends BasePage implements IAPI {
 
 	public var Data:Map<String,Any> = new Map<String,Any>();
 
-  override public function ReadTemplateFromDisk() : String {
-    #if js
-      var fs:Dynamic = js.Lib.require('fs-extra');
-
-      return fs.readFileSync(TemplateFile); // POSSIBLE PROBLEM, could not return String if file does not exist
-    #end
-    #if hl
-
-    #end
-  }
 }
 
 /**

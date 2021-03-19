@@ -9,6 +9,7 @@ class Main {
     myServer.serve("get","/hellothere",(req,res)->{
       res.send("Hello there ;)");
     });
+    
     myServer.autoRegisterPages([new IndexPage()]);
     myServer.generateFiles();
     myServer.listen(3001,()->{
