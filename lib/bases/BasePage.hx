@@ -1,13 +1,12 @@
 package lib.bases;
 
-import js.html.webgl.Buffer;
+import util.Routing.IRoutingMatchable;
 import haxe.Exception;
-import pieces.DebugPiece;
 import util.Minimize;
 import haxe.Template;
 import util.Request;
 
-abstract class AbstractPage {
+abstract class AbstractPage implements IRoutingMatchable {
   public var DynamicPath: String;
   
   public var BasePath = ".";
@@ -74,6 +73,10 @@ class BasePage extends AbstractPage {
 
     #end
   }
+
+	public function match(pathRequested:String):Bool {
+		throw new haxe.exceptions.NotImplementedException();
+	}
 }
 
 class StaticFileGeneratedPage extends BasePage{
@@ -192,6 +195,10 @@ class BaseBackEndPiece extends AbstractPage {
 	}
 
 	public function WriteToDisk() {}
+
+	public function match(pathRequested:String):Bool {
+		throw new haxe.exceptions.NotImplementedException();
+	}
 }
 
 interface IAPI {

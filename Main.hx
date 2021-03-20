@@ -6,9 +6,9 @@ import util.Server.ServingServer;
 class Main {
   static public function main():Void {
     var myServer = new ServingServer();
-    myServer.serve("get","/hellothere",(req,res)->{
-      res.send("Hello there ;)");
-    });
+    //myServer.serve("get","/hellothere",(req,res)->{
+    //  res.send("Hello there ;)");
+    //});
     
     myServer.autoRegisterPages([new IndexPage()]);
     myServer.generateFiles();

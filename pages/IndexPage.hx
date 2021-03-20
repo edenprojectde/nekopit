@@ -32,5 +32,7 @@ class IndexPage extends ApiPage {
   //  return templ;
   //}
 
-
+  override function match(pathRequested:String):Bool {
+    return pathRequested == DynamicPath || pathRequested == FilePath;
+  }
 }
