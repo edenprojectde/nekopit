@@ -11,3 +11,22 @@ This was originally intended to only be a neko playaround project. I kinda expan
 While testing i saw that HL has an as good, if not even better performance than NodeJS raw performance. (Empty page load)
 
 This should scale really well into bigger sites and it's primarilly a test to see if it will be as useful as i am thinking. And maybe even implementing hpp will be an option later too.
+
+## How to build&start
+
+1. Clone this repo.
+    - Install dependencies for node (`npm i .`)
+    
+    OR
+
+    - Install dependencies for Haxe to get autocomplete. 
+    (`haxelib install hxnodejs 12.1.0 `)
+
+2. Run build script
+    - Run either ./buildscripts/build-and-run-js.sh
+
+    OR
+
+    - Run either ./buildscripts/build-and-run-hl.sh
+
+There is currently no way to watch for file changes or build for C++.
