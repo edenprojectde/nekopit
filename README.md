@@ -12,21 +12,32 @@ While testing i saw that HL has an as good, if not even better performance than 
 
 This should scale really well into bigger sites and it's primarilly a test to see if it will be as useful as i am thinking. And maybe even implementing hpp will be an option later too.
 
+## Prerequisites
+
+- Haxe (4.2.1+)
+- Node(12.0.0+)
+Other Versions may work as well.
 ## How to build&start
 
+For Javascript
+
 1. Clone this repo.
-    - Install dependencies for node (`npm i .`)
+2. Install dependencies for node 
     
-    OR
+    `npm i .`
+3. Run build script 
 
-    - Install dependencies for Haxe to get autocomplete. 
-    (`haxelib install hxnodejs 12.1.0 `)
+    `./buildscripts/build-and-run-js.sh`
 
-2. Run build script
-    - Run either ./buildscripts/build-and-run-js.sh
 
-    OR
+For Hashlink
 
-    - Run either ./buildscripts/build-and-run-hl.sh
+1. Clone this repo.
+2. Install dependencies for Haxe to get autocomplete. 
+    
+    `haxelib install hxnodejs 12.1.0 `
+3. Run build script 
+
+    `./buildscripts/build-and-run-hl.sh`
 
 There is currently no way to watch for file changes or build for C++.
