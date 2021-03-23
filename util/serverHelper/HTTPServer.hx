@@ -18,7 +18,7 @@ class HTTPServer {
 		var server = js.node.Http.createServer((request, response) -> {
 			var matched = routes.matchRoute(request.url);
 			if(matched!=null) {
-				response.write(matched.GenerateHTML());
+				response.write(matched.GenerateHTMLPerHTTPParameter(request, response));
 			}
             response.write("Ugha + "+ request.url);
 			response.end();

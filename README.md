@@ -33,7 +33,7 @@ For Javascript
 For Hashlink
 
 1. Clone this repo.
-2. Install dependencies for Haxe to get autocomplete. 
+2. Install dependencies for Haxe to get nodeJS  Haxe mappings & autocomplete.
     
     `haxelib install hxnodejs 12.1.0 `
 3. Run build script 

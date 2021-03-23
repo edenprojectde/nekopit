@@ -275,7 +275,10 @@
 	supported consistently. Some targets may support dates outside this range,
 	depending on the OS at runtime. The `Date.fromTime` method will not work with
 	timestamps outside the range on any target.</haxe_doc>
-		<meta><m n=":coreApi"/></meta>
+		<meta>
+			<m n=":directlyUsed"/>
+			<m n=":coreApi"/>
+		</meta>
 	</class>
 	<class path="js.lib.RegExp" params="" file="/usr/share/haxe/std/js/lib/RegExp.hx" extern="1">
 		<global public="1" set="null">
@@ -891,7 +894,7 @@
 		</meta>
 	</class>
 	<class path="Main" params="" file="Main.hx">
-		<main public="1" set="method" line="7" static="1">
+		<main public="1" set="method" line="9" static="1">
 			<f a=""><x path="Void"/></f>
 			<meta><m n=":keep"/></meta>
 		</main>
@@ -947,6 +950,16 @@
 
 		If `o` or `field` are null, the result is unspecified.</haxe_doc>
 		</getProperty>
+		<isFunction public="1" set="method" line="74" static="1">
+			<f a="f">
+				<d/>
+				<x path="Bool"/>
+			</f>
+			<meta><m n=":access"><e>js.Boot</e></m></meta>
+			<haxe_doc>Returns true if `f` is a function, false otherwise.
+
+		If `f` is null, the result is false.</haxe_doc>
+		</isFunction>
 		<isObject public="1" set="method" line="91" static="1">
 			<f a="v">
 				<d/>
@@ -1453,6 +1466,35 @@
 			<m n=":directlyUsed"/>
 		</meta>
 	</class>
+	<class path="Type" params="" file="/usr/share/haxe/std/js/_std/Type.hx">
+		<createEnum public="1" params="T" set="method" line="146" static="1">
+			<f a="e:constr:?params">
+				<x path="Enum"><c path="createEnum.T"/></x>
+				<c path="String"/>
+				<c path="Array"><d/></c>
+				<c path="createEnum.T"/>
+			</f>
+			<haxe_doc>Creates an instance of enum `e` by calling its constructor `constr` with
+		arguments `params`.
+
+		If `e` or `constr` is null, or if enum `e` has no constructor named
+		`constr`, or if the number of elements in `params` does not match the
+		expected number of constructor arguments, or if any argument has an
+		invalid type, the result is unspecified.</haxe_doc>
+		</createEnum>
+		<haxe_doc>The Haxe Reflection API allows retrieval of type information at runtime.
+
+	This class complements the more lightweight Reflect class, with a focus on
+	class and enum instances.
+
+	@see https://haxe.org/manual/types.html
+	@see https://haxe.org/manual/std-reflection.html</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+			<m n=":coreApi"/>
+		</meta>
+	</class>
 	<enum path="haxe.StackItem" params="" file="/usr/share/haxe/std/haxe/CallStack.hx" module="haxe.CallStack">
 		<CFunction/>
 		<Module a="m"><c path="String"/></Module>
@@ -1561,7 +1603,13 @@
 	type, the underlying type will be `Dynamic`.]]></haxe_doc>
 		<impl><class path="haxe._Constraints.Constructible_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" final="1"><meta><m n=":keep"/></meta></class></impl>
 	</abstract>
-	<class path="haxe.IMap" params="K:V" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints" interface="1"><meta><m n=":keep"/></meta></class>
+	<class path="haxe.IMap" params="K:V" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints" interface="1">
+		<get public="1" set="method"><f a="k">
+	<c path="haxe.IMap.K"/>
+	<x path="Null"><c path="haxe.IMap.V"/></x>
+</f></get>
+		<meta><m n=":keep"/></meta>
+	</class>
 	<abstract path="haxe.DynamicAccess" params="T" file="/usr/share/haxe/std/haxe/DynamicAccess.hx">
 		<from><icast><d><c path="haxe.DynamicAccess.T"/></d></icast></from>
 		<this><d><c path="haxe.DynamicAccess.T"/></d></this>
@@ -2231,6 +2279,118 @@
 			<m n=":directlyUsed"/>
 		</meta>
 	</class>
+	<class path="haxe._Unserializer.DefaultResolver" params="" file="/usr/share/haxe/std/haxe/Unserializer.hx" private="1" module="haxe.Unserializer">
+		<resolveClass public="1" get="inline" set="null" line="515"><f a="name">
+	<c path="String"/>
+	<x path="Class"><d/></x>
+</f></resolveClass>
+		<resolveEnum public="1" get="inline" set="null" line="518"><f a="name">
+	<c path="String"/>
+	<x path="Enum"><d/></x>
+</f></resolveEnum>
+		<new public="1" set="method" line="512"><f a=""><x path="Void"/></f></new>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="haxe.Unserializer" params="" file="/usr/share/haxe/std/haxe/Unserializer.hx">
+		<DEFAULT_RESOLVER public="1" expr="new DefaultResolver()" line="67" static="1">
+			<t path="haxe.TypeResolver"/>
+			<meta><m n=":value"><e>new DefaultResolver()</e></m></meta>
+			<haxe_doc><![CDATA[This value can be set to use custom type resolvers.
+
+		A type resolver finds a `Class` or `Enum` instance from a given `String`.
+		By default, the Haxe `Type` Api is used.
+
+		A type resolver must provide two methods:
+
+		1. `resolveClass(name:String):Class<Dynamic>` is called to determine a
+				`Class` from a class name
+		2. `resolveEnum(name:String):Enum<Dynamic>` is called to determine an
+				`Enum` from an enum name
+
+		This value is applied when a new `Unserializer` instance is created.
+		Changing it afterwards has no effect on previously created instances.]]></haxe_doc>
+		</DEFAULT_RESOLVER>
+		<BASE64 expr="&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:&quot;" line="69" static="1">
+			<c path="String"/>
+			<meta><m n=":value"><e>"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:"</e></m></meta>
+		</BASE64>
+		<CODES expr="null" line="72" static="1">
+			<c path="Array"><x path="Int"/></c>
+			<meta><m n=":value"><e>null</e></m></meta>
+		</CODES>
+		<initCodes set="method" line="74" static="1"><f a=""><c path="Array"><x path="Int"/></c></f></initCodes>
+		<buf><c path="String"/></buf>
+		<pos><x path="Int"/></pos>
+		<length><x path="Int"/></length>
+		<cache><c path="Array"><d/></c></cache>
+		<scache><c path="Array"><c path="String"/></c></scache>
+		<resolver><t path="haxe.TypeResolver"/></resolver>
+		<readDigits set="method" line="150"><f a=""><x path="Int"/></f></readDigits>
+		<readFloat set="method" line="175"><f a=""><x path="Float"/></f></readFloat>
+		<unserializeObject set="method" line="190"><f a="o">
+	<a/>
+	<x path="Void"/>
+</f></unserializeObject>
+		<unserializeEnum params="T" set="method" line="205"><f a="edecl:tag">
+	<x path="Enum"><c path="unserializeEnum.T"/></x>
+	<c path="String"/>
+	<c path="unserializeEnum.T"/>
+</f></unserializeEnum>
+		<unserialize public="1" set="method" line="237">
+			<f a=""><d/></f>
+			<haxe_doc>Unserializes the next part of `this` Unserializer instance and returns
+		the according value.
+
+		This function may call `this.resolver.resolveClass` to determine a
+		Class from a String, and `this.resolver.resolveEnum` to determine an
+		Enum from a String.
+
+		If `this` Unserializer instance contains no more or invalid data, an
+		exception is thrown.
+
+		This operation may fail on structurally valid data if a type cannot be
+		resolved or if a field cannot be set. This can happen when unserializing
+		Strings that were serialized on a different Haxe target, in which the
+		serialization side has to make sure not to include platform-specific
+		data.
+
+		Classes are created from `Type.createEmptyInstance`, which means their
+		constructors are not called.</haxe_doc>
+		</unserialize>
+		<new public="1" set="method" line="101">
+			<f a="buf">
+				<c path="String"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Creates a new Unserializer instance, with its internal buffer
+		initialized to `buf`.
+
+		This does not parse `buf` immediately. It is parsed only when calls to
+		`this.unserialize` are made.
+
+		Each Unserializer instance maintains its own cache.</haxe_doc>
+		</new>
+		<haxe_doc><![CDATA[The `Unserializer` class is the complement to the `Serializer` class. It parses
+	a serialization `String` and creates objects from the contained data.
+
+	This class can be used in two ways:
+
+	- create a `new Unserializer()` instance with a given serialization
+		String, then call its `unserialize()` method until all values are
+		extracted
+	- call `Unserializer.run()`  to unserialize a single value from a given
+		String
+
+	The specification of the serialization format can be found here:
+	<https://haxe.org/manual/serialization/format>]]></haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
 	<class path="haxe.ValueException" params="" file="/usr/share/haxe/std/haxe/ValueException.hx">
 		<extends path="haxe.Exception"/>
 		<value public="1" set="null">
@@ -2268,728 +2428,54 @@
 			<m n=":directlyUsed"/>
 		</meta>
 	</class>
-	<abstract path="haxe.ds.HashMap" params="K:V" file="/usr/share/haxe/std/haxe/ds/HashMap.hx">
-		<this><c path="haxe.ds._HashMap.HashMapData">
-	<c path="haxe.ds.HashMap.K"/>
-	<c path="haxe.ds.HashMap.V"/>
-</c></this>
-		<haxe_doc>HashMap allows mapping of hashable objects to arbitrary values.
-
-	See `Map` for documentation details.
-
-	@see https://haxe.org/manual/std-Map.html</haxe_doc>
-		<impl><class path="haxe.ds._HashMap.HashMap_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap" final="1"><meta><m n=":keep"/></meta></class></impl>
-	</abstract>
-	<class path="haxe.ds.List" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx">
-		<h><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></h>
-		<q><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></q>
-		<length public="1" set="null">
-			<x path="Int"/>
-			<haxe_doc>The length of `this` List.</haxe_doc>
-		</length>
-		<add public="1" set="method" line="53">
-			<f a="item">
-				<c path="haxe.ds.List.T"/>
-				<x path="Void"/>
+	<class path="haxe.io.Bytes" params="" file="/usr/share/haxe/std/js/_std/haxe/io/Bytes.hx">
+		<ofString public="1" set="method" line="206" static="1">
+			<f a="s:?encoding">
+				<c path="String"/>
+				<e path="haxe.io.Encoding"/>
+				<c path="haxe.io.Bytes"/>
 			</f>
-			<haxe_doc>Adds element `item` at the end of `this` List.
-
-		`this.length` increases by 1.</haxe_doc>
-		</add>
-		<push public="1" set="method" line="68">
-			<f a="item">
-				<c path="haxe.ds.List.T"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Adds element `item` at the beginning of `this` List.
-
-		`this.length` increases by 1.</haxe_doc>
-		</push>
-		<first public="1" set="method" line="81">
-			<f a=""><x path="Null"><c path="haxe.ds.List.T"/></x></f>
-			<haxe_doc>Returns the first element of `this` List, or null if no elements exist.
-
-		This function does not modify `this` List.</haxe_doc>
-		</first>
-		<pop public="1" set="method" line="99">
-			<f a=""><x path="Null"><c path="haxe.ds.List.T"/></x></f>
-			<haxe_doc>Returns the first element of `this` List, or null if no elements exist.
-
-		The element is removed from `this` List.</haxe_doc>
-		</pop>
-		<isEmpty public="1" set="method" line="113">
-			<f a=""><x path="Bool"/></f>
-			<haxe_doc>Tells if `this` List is empty.</haxe_doc>
-		</isEmpty>
-		<toString public="1" set="method" line="177">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>Returns a string representation of `this` List.
-
-		The result is enclosed in { } with the individual elements being
-		separated by a comma.</haxe_doc>
-		</toString>
-		<new public="1" set="method" line="44">
-			<f a=""><x path="Void"/></f>
-			<haxe_doc>Creates a new empty list.</haxe_doc>
-		</new>
-		<haxe_doc>A linked-list of elements. The list is composed of element container objects
-	that are chained together. It is optimized so that adding or removing an
-	element does not imply copying the whole list content every time.
-
-	@see https://haxe.org/manual/std-List.html</haxe_doc>
-		<meta>
-			<m n=":keep"/>
-			<m n=":directlyUsed"/>
-		</meta>
-	</class>
-	<class path="haxe.ds._List.ListNode" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
-		<item public="1"><c path="haxe.ds._List.ListNode.T"/></item>
-		<next public="1"><c path="haxe.ds._List.ListNode"><c path="haxe.ds._List.ListNode.T"/></c></next>
-		<new public="1" set="method" line="266"><f a="item:next">
-	<c path="haxe.ds._List.ListNode.T"/>
-	<c path="haxe.ds._List.ListNode"><c path="haxe.ds._List.ListNode.T"/></c>
-	<x path="Void"/>
-</f></new>
-		<meta>
-			<m n=":keep"/>
-			<m n=":directlyUsed"/>
-		</meta>
-	</class>
-	<abstract path="haxe.ds.Map" params="K:V" file="/usr/share/haxe/std/haxe/ds/Map.hx">
-		<from>
-			<icast field="fromStringMap"><c path="haxe.ds.StringMap"><c path="fromStringMap.V"/></c></icast>
-			<icast field="fromIntMap"><c path="haxe.ds.IntMap"><c path="fromIntMap.V"/></c></icast>
-			<icast field="fromObjectMap"><c path="haxe.ds.ObjectMap">
-	<c path="fromObjectMap.K"/>
-	<c path="fromObjectMap.V"/>
-</c></icast>
-		</from>
-		<this><c path="haxe.IMap">
-	<c path="haxe.ds.Map.K"/>
-	<c path="haxe.ds.Map.V"/>
-</c></this>
-		<to>
-			<icast field="toStringMap"><c path="haxe.ds.StringMap"><c path="toStringMap.V"/></c></icast>
-			<icast field="toIntMap"><c path="haxe.ds.IntMap"><c path="toIntMap.V"/></c></icast>
-			<icast field="toEnumValueMapMap"><c path="haxe.ds.EnumValueMap">
-	<c path="toEnumValueMapMap.K"/>
-	<c path="toEnumValueMapMap.V"/>
-</c></icast>
-			<icast field="toObjectMap"><c path="haxe.ds.ObjectMap">
-	<c path="toObjectMap.K"/>
-	<c path="toObjectMap.V"/>
-</c></icast>
-		</to>
-		<haxe_doc><![CDATA[Map allows key to value mapping for arbitrary value types, and many key
-	types.
-
-	This is a multi-type abstract, it is instantiated as one of its
-	specialization types depending on its type parameters.
-
-	A Map can be instantiated without explicit type parameters. Type inference
-	will then determine the type parameters from the usage.
-
-	Maps can also be created with `[key1 => value1, key2 => value2]` syntax.
-
-	Map is an abstract type, it is not available at runtime.
-
-	@see https://haxe.org/manual/std-Map.html]]></haxe_doc>
-		<meta>
-			<m n=":transitive"/>
-			<m n=":multiType"><e>@:followWithAbstracts K</e></m>
-		</meta>
-		<impl><class path="haxe.ds._Map.Map_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/Map.hx" private="1" module="haxe.ds.Map" final="1"><meta><m n=":keep"/></meta></class></impl>
-	</abstract>
-	<abstract path="haxe.ds.ReadOnlyArray" params="T" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx">
-		<from><icast><c path="Array"><c path="haxe.ds.ReadOnlyArray.T"/></c></icast></from>
-		<this><c path="Array"><c path="haxe.ds.ReadOnlyArray.T"/></c></this>
-		<to><icast><t path="Iterable"><c path="haxe.ds.ReadOnlyArray.T"/></t></icast></to>
-		<haxe_doc>`ReadOnlyArray` is an abstract over an ordinary `Array` which only exposes
-	APIs that don't modify the instance, hence "read-only".
-
-	Note that this doesn't necessarily mean that the instance is *immutable*.
-	Other code holding a reference to the underlying `Array` can still modify it,
-	and the reference can be obtained with a `cast`.</haxe_doc>
-		<meta><m n=":forward">
-	<e>copy</e>
-	<e>filter</e>
-	<e>indexOf</e>
-	<e>iterator</e>
-	<e>keyValueIterator</e>
-	<e>join</e>
-	<e>lastIndexOf</e>
-	<e>map</e>
-	<e>slice</e>
-	<e>contains</e>
-	<e>toString</e>
-</m></meta>
-		<impl><class path="haxe.ds._ReadOnlyArray.ReadOnlyArray_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx" private="1" module="haxe.ds.ReadOnlyArray" final="1"><meta><m n=":keep"/></meta></class></impl>
-	</abstract>
-	<class path="haxe.ds.StringMap" params="T" file="/usr/share/haxe/std/js/_std/haxe/ds/StringMap.hx">
-		<implements path="haxe.IMap">
-			<c path="String"/>
-			<c path="haxe.ds.StringMap.T"/>
-		</implements>
-		<stringify set="method" line="89" static="1">
-			<f a="h">
-				<d/>
+			<haxe_doc>Returns the `Bytes` representation of the given `String`, using the
+		specified encoding (UTF-8 by default).</haxe_doc>
+		</ofString>
+		<length public="1" set="null"><x path="Int"/></length>
+		<b><c path="js.lib.Uint8Array"/></b>
+		<getString public="1" set="method" line="134">
+			<f a="pos:len:?encoding">
+				<x path="Int"/>
+				<x path="Int"/>
+				<e path="haxe.io.Encoding"/>
 				<c path="String"/>
 			</f>
-			<meta><m n=":analyzer"><e>no_optimize</e></m></meta>
-		</stringify>
-		<h><d/></h>
-		<new public="1" get="inline" set="null" line="33">
-			<f a=""><x path="Void"/></f>
-			<haxe_doc>Creates a new StringMap.</haxe_doc>
+			<haxe_doc>Returns the `len`-bytes long string stored at the given position `pos`,
+		interpreted with the given `encoding` (UTF-8 by default).</haxe_doc>
+		</getString>
+		<toString public="1" set="method" line="180">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>Returns a `String` representation of the bytes interpreted as UTF-8.</haxe_doc>
+		</toString>
+		<new set="method" line="32">
+			<f a="data">
+				<t path="haxe.io.BytesData"/>
+				<x path="Void"/>
+			</f>
+			<meta><m n=":has_untyped"/></meta>
 		</new>
-		<haxe_doc>StringMap allows mapping of String keys to arbitrary values.
-
-	See `Map` for documentation details.
-
-	@see https://haxe.org/manual/std-Map.html</haxe_doc>
 		<meta>
 			<m n=":keep"/>
 			<m n=":directlyUsed"/>
 			<m n=":coreApi"/>
 		</meta>
 	</class>
-	<typedef path="haxe.ds._Vector.VectorData" params="T" file="/usr/share/haxe/std/haxe/ds/Vector.hx" private="1" module="haxe.ds.Vector"><c path="Array"><c path="haxe.ds._Vector.VectorData.T"/></c></typedef>
-	<abstract path="haxe.ds.Vector" params="T" file="/usr/share/haxe/std/haxe/ds/Vector.hx">
-		<this><t path="haxe.ds._Vector.VectorData"><c path="haxe.ds.Vector.T"/></t></this>
-		<haxe_doc>A Vector is a storage of fixed size. It can be faster than Array on some
-	targets, and is never slower.
-
-	@see https://haxe.org/manual/std-vector.html</haxe_doc>
-		<impl><class path="haxe.ds._Vector.Vector_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/Vector.hx" private="1" module="haxe.ds.Vector" final="1"><meta><m n=":keep"/></meta></class></impl>
-	</abstract>
-	<class path="haxe.exceptions.PosException" params="" file="/usr/share/haxe/std/haxe/exceptions/PosException.hx">
-		<extends path="haxe.Exception"/>
-		<posInfos final="1" public="1">
-			<t path="haxe.PosInfos"/>
-			<haxe_doc>Position where this exception was created.</haxe_doc>
-		</posInfos>
-		<toString public="1" set="method" line="24" override="1">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>Returns exception message.</haxe_doc>
-		</toString>
-		<new public="1" set="method" line="12"><f a="message:?previous:?pos">
-	<c path="String"/>
-	<c path="haxe.Exception"/>
-	<x path="Null"><t path="haxe.PosInfos"/></x>
-	<x path="Void"/>
-</f></new>
-		<haxe_doc>An exception that carry position information of a place where it was created.</haxe_doc>
+	<enum path="haxe.io.Encoding" params="" file="/usr/share/haxe/std/haxe/io/Encoding.hx">
+		<UTF8/>
+		<RawNative><haxe_doc>Output the string the way the platform represent it in memory. This is the most efficient but is platform-specific</haxe_doc></RawNative>
+		<haxe_doc>String binary encoding supported by Haxe I/O</haxe_doc>
 		<meta>
-			<m n=":keep"/>
 			<m n=":directlyUsed"/>
+			<m n=":flatEnum"/>
 		</meta>
-	</class>
-	<class path="haxe.exceptions.NotImplementedException" params="" file="/usr/share/haxe/std/haxe/exceptions/NotImplementedException.hx">
-		<extends path="haxe.exceptions.PosException"/>
-		<new public="1" set="method" line="7">
-			<f a="?message:?previous:?pos" v="&quot;Not implemented&quot;::">
-				<c path="String"/>
-				<c path="haxe.Exception"/>
-				<x path="Null"><t path="haxe.PosInfos"/></x>
-				<x path="Void"/>
-			</f>
-			<meta><m n=":value"><e>{ message : "Not implemented" }</e></m></meta>
-		</new>
-		<haxe_doc>An exception that is thrown when requested function or operation does not have an implementation.</haxe_doc>
-		<meta>
-			<m n=":keep"/>
-			<m n=":directlyUsed"/>
-		</meta>
-	</class>
-	<abstract path="haxe.extern.EitherType" params="T1:T2" file="/usr/share/haxe/std/haxe/extern/EitherType.hx">
-		<from>
-			<icast><c path="haxe.extern.EitherType.T1"/></icast>
-			<icast><c path="haxe.extern.EitherType.T2"/></icast>
-		</from>
-		<this><d/></this>
-		<to>
-			<icast><c path="haxe.extern.EitherType.T1"/></icast>
-			<icast><c path="haxe.extern.EitherType.T2"/></icast>
-		</to>
-		<haxe_doc><![CDATA[An abstract type allowing values to be either of `T1` or `T2` type.
-	Supports implicit casts from/to either types.
-
-	It is useful for interfacing with external code on dynamic platforms
-	such as JavaScript or Python.
-
-	Otherwise, use of this type is discouraged.
-
-	@see <https://haxe.org/manual/lf-externs.html>]]></haxe_doc>
-		<meta><m n=":transitive"/></meta>
-		<impl><class path="haxe.extern._EitherType.EitherType_Impl_" params="" file="/usr/share/haxe/std/haxe/extern/EitherType.hx" private="1" module="haxe.extern.EitherType" final="1"><meta><m n=":keep"/></meta></class></impl>
-	</abstract>
-	<typedef path="haxe.extern.Rest" params="T" file="/usr/share/haxe/std/haxe/extern/Rest.hx">
-		<x path="haxe.Rest"><c path="haxe.extern.Rest.T"/></x>
-		<haxe_doc><![CDATA[DEPRECATED: use haxe.Rest instead.
-	
-	A special type that represents "rest" function argument.
-	Should be used as a type for the last argument of an extern method,
-	representing that arbitrary number of arguments of given type can be
-	passed to that method.
-	@see <https://haxe.org/manual/lf-externs.html>]]></haxe_doc>
-	</typedef>
-	<typedef path="haxe.io.ArrayBufferViewData" params="" file="/usr/share/haxe/std/js/_std/haxe/io/ArrayBufferView.hx" module="haxe.io.ArrayBufferView"><c path="js.lib.ArrayBufferView"/></typedef>
-	<abstract path="haxe.io.ArrayBufferView" params="" file="/usr/share/haxe/std/js/_std/haxe/io/ArrayBufferView.hx">
-		<this><t path="haxe.io.ArrayBufferViewData"/></this>
-		<impl><class path="haxe.io._ArrayBufferView.ArrayBufferView_Impl_" params="" file="/usr/share/haxe/std/js/_std/haxe/io/ArrayBufferView.hx" private="1" module="haxe.io.ArrayBufferView" final="1"><meta><m n=":keep"/></meta></class></impl>
-	</abstract>
-	<typedef path="haxe.io.BytesData" params="" file="/usr/share/haxe/std/haxe/io/BytesData.hx"><c path="js.lib.ArrayBuffer"/></typedef>
-	<class path="haxe.io.Path" params="" file="/usr/share/haxe/std/haxe/io/Path.hx">
-		<join public="1" set="method" line="189" static="1">
-			<f a="paths">
-				<c path="Array"><c path="String"/></c>
-				<c path="String"/>
-			</f>
-			<haxe_doc>Joins all paths in `paths` together.
-
-		If `paths` is empty, the empty String `""` is returned. Otherwise the
-		paths are joined with a slash between them.
-
-		If `paths` is `null`, the result is unspecified.</haxe_doc>
-		</join>
-		<normalize public="1" set="method" line="210" static="1">
-			<f a="path">
-				<c path="String"/>
-				<c path="String"/>
-			</f>
-			<haxe_doc>Normalize a given `path` (e.g. turn `'/usr/local/../lib'` into `'/usr/lib'`).
-
-		Also replaces backslashes `\` with slashes `/` and afterwards turns
-		multiple slashes into a single one.
-
-		If `path` is `null`, the result is unspecified.</haxe_doc>
-		</normalize>
-		<addTrailingSlash public="1" set="method" line="271" static="1">
-			<f a="path">
-				<c path="String"/>
-				<c path="String"/>
-			</f>
-			<haxe_doc>Adds a trailing slash to `path`, if it does not have one already.
-
-		If the last slash in `path` is a backslash, a backslash is appended to
-		`path`.
-
-		If the last slash in `path` is a slash, or if no slash is found, a slash
-		is appended to `path`. In particular, this applies to the empty String
-		`""`.
-
-		If `path` is `null`, the result is unspecified.</haxe_doc>
-		</addTrailingSlash>
-		<haxe_doc>This class provides a convenient way of working with paths. It supports the
-	common path formats:
-
-	- `directory1/directory2/filename.extension`
-	- `directory1\directory2\filename.extension`</haxe_doc>
-		<meta>
-			<m n=":keep"/>
-			<m n=":directlyUsed"/>
-		</meta>
-	</class>
-	<typedef path="haxe.io.UInt8ArrayData" params="" file="/usr/share/haxe/std/js/_std/haxe/io/UInt8Array.hx" module="haxe.io.UInt8Array"><c path="js.lib.Uint8Array"/></typedef>
-	<abstract path="haxe.io.UInt8Array" params="" file="/usr/share/haxe/std/js/_std/haxe/io/UInt8Array.hx">
-		<this><t path="haxe.io.UInt8ArrayData"/></this>
-		<meta><m n=":coreApi"/></meta>
-		<impl><class path="haxe.io._UInt8Array.UInt8Array_Impl_" params="" file="/usr/share/haxe/std/js/_std/haxe/io/UInt8Array.hx" private="1" module="haxe.io.UInt8Array" final="1"><meta>
-	<m n=":keep"/>
-	<m n=":coreApi"/>
-</meta></class></impl>
-	</abstract>
-	<typedef path="haxe.macro.Position" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<min>
-				<x path="Int"/>
-				<haxe_doc>Position of the first character.</haxe_doc>
-			</min>
-			<max>
-				<x path="Int"/>
-				<haxe_doc>Position of the last character.</haxe_doc>
-			</max>
-			<file>
-				<c path="String"/>
-				<haxe_doc>Reference to the filename.</haxe_doc>
-			</file>
-		</a>
-		<haxe_doc>Represents a position in a file.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Expr" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx">
-		<a>
-			<pos>
-				<t path="haxe.macro.Position"/>
-				<haxe_doc>The position of the expression.</haxe_doc>
-			</pos>
-			<expr>
-				<e path="haxe.macro.ExprDef"/>
-				<haxe_doc>The expression kind.</haxe_doc>
-			</expr>
-		</a>
-		<haxe_doc>Represents a node in the AST.
-	@see https://haxe.org/manual/macro-reification-expression.html</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.ExprOf" params="T" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<t path="haxe.macro.Expr"/>
-		<haxe_doc>Represents a AST node identical to `Expr`, but it allows constraining the
-	type of accepted expressions.
-	@see https://haxe.org/manual/macro-ExprOf.html</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Case" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<values>
-				<c path="Array"><t path="haxe.macro.Expr"/></c>
-				<haxe_doc>The value expressions of the case.</haxe_doc>
-			</values>
-			<guard>
-				<x path="Null"><t path="haxe.macro.Expr"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional guard expressions of the case, if available.</haxe_doc>
-			</guard>
-			<expr>
-				<x path="Null"><t path="haxe.macro.Expr"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The expression of the case, if available.</haxe_doc>
-			</expr>
-		</a>
-		<haxe_doc>Represents a switch case.
-	@see https://haxe.org/manual/expression-switch.html</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Var" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<type>
-				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The type-hint of the variable, if available.</haxe_doc>
-			</type>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the variable.</haxe_doc>
-			</name>
-			<meta>
-				<x path="Null"><t path="haxe.macro.Metadata"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>Metadata associatied with the variable, if available.</haxe_doc>
-			</meta>
-			<isFinal>
-				<x path="Null"><x path="Bool"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>Whether or not the variable can be assigned to.</haxe_doc>
-			</isFinal>
-			<expr>
-				<x path="Null"><t path="haxe.macro.Expr"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The expression of the variable, if available.</haxe_doc>
-			</expr>
-		</a>
-		<haxe_doc>Represents a variable in the AST.
-	@see https://haxe.org/manual/expression-var.html</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Catch" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<type>
-				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The type of the catch.</haxe_doc>
-			</type>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the catch variable.</haxe_doc>
-			</name>
-			<expr>
-				<t path="haxe.macro.Expr"/>
-				<haxe_doc>The expression of the catch.</haxe_doc>
-			</expr>
-		</a>
-		<haxe_doc>Represents a catch in the AST.
-	@see https://haxe.org/manual/expression-try-catch.html</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.ObjectField" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<quotes>
-				<x path="Null"><e path="haxe.macro.QuoteStatus"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>How the field name is quoted.</haxe_doc>
-			</quotes>
-			<field>
-				<c path="String"/>
-				<haxe_doc>The name of the field.</haxe_doc>
-			</field>
-			<expr>
-				<t path="haxe.macro.Expr"/>
-				<haxe_doc>The field expression.</haxe_doc>
-			</expr>
-		</a>
-		<haxe_doc>Represents the field of an object declaration.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.TypePath" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<sub>
-				<x path="Null"><c path="String"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>Sub is set on module sub-type access:
-		`pack.Module.Type` has `name = "Module"`, `sub = "Type"`, if available.</haxe_doc>
-			</sub>
-			<params>
-				<x path="Null"><c path="Array"><e path="haxe.macro.TypeParam"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>Optional parameters of the type path.</haxe_doc>
-			</params>
-			<pack>
-				<c path="Array"><c path="String"/></c>
-				<haxe_doc>Represents the package of the type path.</haxe_doc>
-			</pack>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the type path.</haxe_doc>
-			</name>
-		</a>
-		<haxe_doc>Represents a type path in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.TypeParamDecl" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<params>
-				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional parameters of the type parameter.</haxe_doc>
-			</params>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the type parameter.</haxe_doc>
-			</name>
-			<meta>
-				<x path="Null"><t path="haxe.macro.Metadata"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The metadata of the type parameter.</haxe_doc>
-			</meta>
-			<constraints>
-				<x path="Null"><c path="Array"><e path="haxe.macro.ComplexType"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional constraints of the type parameter.</haxe_doc>
-			</constraints>
-		</a>
-		<haxe_doc>Represents a type parameter declaration in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Function" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<ret>
-				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The return type-hint of the function, if available.</haxe_doc>
-			</ret>
-			<params>
-				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>An optional list of function parameter type declarations.</haxe_doc>
-			</params>
-			<expr>
-				<x path="Null"><t path="haxe.macro.Expr"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The expression of the function body, if available.</haxe_doc>
-			</expr>
-			<args>
-				<c path="Array"><t path="haxe.macro.FunctionArg"/></c>
-				<haxe_doc>A list of function arguments.</haxe_doc>
-			</args>
-		</a>
-		<haxe_doc>Represents a function in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.FunctionArg" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<value>
-				<x path="Null"><t path="haxe.macro.Expr"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional value of the function argument, if available.</haxe_doc>
-			</value>
-			<type>
-				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The type-hint of the function argument, if available.</haxe_doc>
-			</type>
-			<opt>
-				<x path="Null"><x path="Bool"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>Whether or not the function argument is optional.</haxe_doc>
-			</opt>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the function argument.</haxe_doc>
-			</name>
-			<meta>
-				<x path="Null"><t path="haxe.macro.Metadata"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The metadata of the function argument.</haxe_doc>
-			</meta>
-		</a>
-		<haxe_doc>Represents a function argument in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.MetadataEntry" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<pos>
-				<t path="haxe.macro.Position"/>
-				<haxe_doc>The position of the metadata entry.</haxe_doc>
-			</pos>
-			<params>
-				<x path="Null"><c path="Array"><t path="haxe.macro.Expr"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional parameters of the metadata entry.</haxe_doc>
-			</params>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the metadata entry.</haxe_doc>
-			</name>
-		</a>
-		<haxe_doc>Represents a metadata entry in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Metadata" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<c path="Array"><t path="haxe.macro.MetadataEntry"/></c>
-		<haxe_doc>Represents metadata in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.Field" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<pos>
-				<t path="haxe.macro.Position"/>
-				<haxe_doc>The position of the field.</haxe_doc>
-			</pos>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the field.</haxe_doc>
-			</name>
-			<meta>
-				<x path="Null"><t path="haxe.macro.Metadata"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional metadata of the field.</haxe_doc>
-			</meta>
-			<kind>
-				<e path="haxe.macro.FieldType"/>
-				<haxe_doc>The kind of the field.</haxe_doc>
-			</kind>
-			<doc>
-				<x path="Null"><c path="String"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The documentation of the field, if available. If the field has no
-		documentation, the value is `null`.</haxe_doc>
-			</doc>
-			<access>
-				<x path="Null"><c path="Array"><e path="haxe.macro.Access"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The access modifiers of the field. By default fields have private access.
-		@see https://haxe.org/manual/class-field-access-modifier.html</haxe_doc>
-			</access>
-		</a>
-		<haxe_doc>Represents a field in the AST.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.TypeDefinition" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<pos>
-				<t path="haxe.macro.Position"/>
-				<haxe_doc>The position to the type definition.</haxe_doc>
-			</pos>
-			<params>
-				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The parameter type declarations of the type definition.</haxe_doc>
-			</params>
-			<pack>
-				<c path="Array"><c path="String"/></c>
-				<haxe_doc>The package of the type definition.</haxe_doc>
-			</pack>
-			<name>
-				<c path="String"/>
-				<haxe_doc>The name of the type definition.</haxe_doc>
-			</name>
-			<meta>
-				<x path="Null"><t path="haxe.macro.Metadata"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The optional metadata of the type definition.</haxe_doc>
-			</meta>
-			<kind>
-				<e path="haxe.macro.TypeDefKind"/>
-				<haxe_doc>The kind of the type definition.</haxe_doc>
-			</kind>
-			<isExtern>
-				<x path="Null"><x path="Bool"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>Whether or not the type is extern.</haxe_doc>
-			</isExtern>
-			<fields>
-				<c path="Array"><t path="haxe.macro.Field"/></c>
-				<haxe_doc>The fields of the type definition.</haxe_doc>
-			</fields>
-			<doc>
-				<x path="Null"><c path="String"/></x>
-				<meta><m n=":optional"/></meta>
-				<haxe_doc>The documentation of the type, if available. If the type has no
-		documentation, the value is `null`.</haxe_doc>
-			</doc>
-		</a>
-		<haxe_doc>Represents a type definition.</haxe_doc>
-	</typedef>
-	<typedef path="haxe.macro.ImportExpr" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
-		<a>
-			<path>
-				<c path="Array"><a>
-	<pos><t path="haxe.macro.Position"/></pos>
-	<name><c path="String"/></name>
-</a></c>
-				<haxe_doc>The path to the import expression.</haxe_doc>
-			</path>
-			<mode>
-				<e path="haxe.macro.ImportMode"/>
-				<haxe_doc>The mode of the import expression.</haxe_doc>
-			</mode>
-		</a>
-		<haxe_doc>Represents the import expression.</haxe_doc>
-	</typedef>
-	<class path="js.Boot" params="" file="/usr/share/haxe/std/js/Boot.hx">
-		<__string_rec set="method" line="58" static="1">
-			<f a="o:s">
-				<a>
-					<toString set="null"><f a=""><c path="String"/></f></toString>
-					<length set="null"><x path="Int"/></length>
-					<hasOwnProperty set="null"><f a="">
-	<c path="String"/>
-	<x path="Bool"/>
-</f></hasOwnProperty>
-					<_hx_index set="null"><x path="Int"/></_hx_index>
-					<__enum__ set="null"><x path="Bool"/></__enum__>
-				</a>
-				<c path="String"/>
-				<c path="String"/>
-			</f>
-			<meta>
-				<m n=":has_untyped"/>
-				<m n=":ifFeature"><e>"has_enum"</e></m>
-			</meta>
-		</__string_rec>
-		<__toStr static="1"><c path="js.lib.Function"/></__toStr>
-		<meta>
-			<m n=":keep"/>
-			<m n=":directlyUsed"/>
-			<m n=":dox"><e>hide</e></m>
-		</meta>
-	</class>
-	<class path="js.lib.ArrayBuffer" params="" file="/usr/share/haxe/std/js/lib/ArrayBuffer.hx" extern="1">
-		<isView public="1" set="method" static="1"><f a="value">
-	<d/>
-	<x path="Bool"/>
-</f></isView>
-		<byteLength final="1" public="1"><x path="Int"/></byteLength>
-		<slice public="1" set="method"><f a="begin:?end">
-	<x path="Int"/>
-	<x path="Int"/>
-	<c path="js.lib.ArrayBuffer"/>
-</f></slice>
-		<new public="1" set="method">
-			<f a="length">
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>@throws DOMError</haxe_doc>
-		</new>
-		<meta><m n=":native"><e>"ArrayBuffer"</e></m></meta>
-	</class>
+	</enum>
 	<class path="js.lib.ArrayBufferView" params="" file="/usr/share/haxe/std/js/lib/ArrayBufferView.hx" extern="1" interface="1">
 		<buffer final="1" public="1"><c path="js.lib.ArrayBuffer"/></buffer>
 		<byteOffset final="1" public="1"><x path="Int"/></byteOffset>
@@ -3745,7 +3231,876 @@
 	methods, or using standard array index syntax (that is, using bracket notation).
 
 	Documentation [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) by [Mozilla Contributors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array$history), licensed under [CC-BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/).</haxe_doc>
-		<meta><m n=":native"><e>"Uint8Array"</e></m></meta>
+		<meta>
+			<m n=":directlyUsed"/>
+			<m n=":native"><e>"Uint8Array"</e></m>
+		</meta>
+	</class>
+	<class path="haxe.crypto.Base64" params="" file="/usr/share/haxe/std/haxe/crypto/Base64.hx">
+		<CHARS public="1" set="null" expr="&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;" line="29" static="1">
+			<c path="String"/>
+			<meta><m n=":value"><e>"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</e></m></meta>
+		</CHARS>
+		<BYTES public="1" set="null" expr="haxe.io.Bytes.ofString(CHARS)" line="30" static="1">
+			<c path="haxe.io.Bytes"/>
+			<meta><m n=":value"><e>haxe.io.Bytes.ofString(CHARS)</e></m></meta>
+		</BYTES>
+		<encode public="1" set="method" line="35" static="1">
+			<f a="bytes:?complement" v=":true">
+				<c path="haxe.io.Bytes"/>
+				<x path="Bool"/>
+				<c path="String"/>
+			</f>
+			<meta><m n=":value"><e>{ complement : true }</e></m></meta>
+		</encode>
+		<decode public="1" set="method" line="48" static="1">
+			<f a="str:?complement" v=":true">
+				<c path="String"/>
+				<x path="Bool"/>
+				<c path="haxe.io.Bytes"/>
+			</f>
+			<meta><m n=":value"><e>{ complement : true }</e></m></meta>
+		</decode>
+		<haxe_doc>Allows one to encode/decode String and bytes using Base64 encoding.</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="haxe.crypto.BaseCode" params="" file="/usr/share/haxe/std/haxe/crypto/BaseCode.hx">
+		<base><c path="haxe.io.Bytes"/></base>
+		<nbits><x path="Int"/></nbits>
+		<tbl><c path="Array"><x path="Int"/></c></tbl>
+		<encodeBytes public="1" set="method" line="44"><f a="b">
+	<c path="haxe.io.Bytes"/>
+	<c path="haxe.io.Bytes"/>
+</f></encodeBytes>
+		<initTable set="method" line="72"><f a=""><x path="Void"/></f></initTable>
+		<decodeBytes public="1" set="method" line="81"><f a="b">
+	<c path="haxe.io.Bytes"/>
+	<c path="haxe.io.Bytes"/>
+</f></decodeBytes>
+		<new public="1" set="method" line="33"><f a="base">
+	<c path="haxe.io.Bytes"/>
+	<x path="Void"/>
+</f></new>
+		<haxe_doc>Allows one to encode/decode String and bytes using a power of two base dictionary.</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<abstract path="haxe.ds.HashMap" params="K:V" file="/usr/share/haxe/std/haxe/ds/HashMap.hx">
+		<this><c path="haxe.ds._HashMap.HashMapData">
+	<c path="haxe.ds.HashMap.K"/>
+	<c path="haxe.ds.HashMap.V"/>
+</c></this>
+		<haxe_doc>HashMap allows mapping of hashable objects to arbitrary values.
+
+	See `Map` for documentation details.
+
+	@see https://haxe.org/manual/std-Map.html</haxe_doc>
+		<impl><class path="haxe.ds._HashMap.HashMap_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap" final="1"><meta><m n=":keep"/></meta></class></impl>
+	</abstract>
+	<class path="haxe.ds.IntMap" params="T" file="/usr/share/haxe/std/js/_std/haxe/ds/IntMap.hx">
+		<implements path="haxe.IMap">
+			<x path="Int"/>
+			<c path="haxe.ds.IntMap.T"/>
+		</implements>
+		<h><d/></h>
+		<get public="1" get="inline" set="null" line="36">
+			<f a="key">
+				<x path="Int"/>
+				<x path="Null"><c path="haxe.ds.IntMap.T"/></x>
+			</f>
+			<haxe_doc>See `Map.get`</haxe_doc>
+		</get>
+		<new public="1" get="inline" set="null" line="28">
+			<f a=""><x path="Void"/></f>
+			<haxe_doc>Creates a new IntMap.</haxe_doc>
+		</new>
+		<haxe_doc>IntMap allows mapping of Int keys to arbitrary values.
+
+	See `Map` for documentation details.
+
+	@see https://haxe.org/manual/std-Map.html</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+			<m n=":coreApi"/>
+		</meta>
+	</class>
+	<class path="haxe.ds.List" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx">
+		<h><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></h>
+		<q><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></q>
+		<length public="1" set="null">
+			<x path="Int"/>
+			<haxe_doc>The length of `this` List.</haxe_doc>
+		</length>
+		<add public="1" set="method" line="53">
+			<f a="item">
+				<c path="haxe.ds.List.T"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Adds element `item` at the end of `this` List.
+
+		`this.length` increases by 1.</haxe_doc>
+		</add>
+		<push public="1" set="method" line="68">
+			<f a="item">
+				<c path="haxe.ds.List.T"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Adds element `item` at the beginning of `this` List.
+
+		`this.length` increases by 1.</haxe_doc>
+		</push>
+		<first public="1" set="method" line="81">
+			<f a=""><x path="Null"><c path="haxe.ds.List.T"/></x></f>
+			<haxe_doc>Returns the first element of `this` List, or null if no elements exist.
+
+		This function does not modify `this` List.</haxe_doc>
+		</first>
+		<pop public="1" set="method" line="99">
+			<f a=""><x path="Null"><c path="haxe.ds.List.T"/></x></f>
+			<haxe_doc>Returns the first element of `this` List, or null if no elements exist.
+
+		The element is removed from `this` List.</haxe_doc>
+		</pop>
+		<isEmpty public="1" set="method" line="113">
+			<f a=""><x path="Bool"/></f>
+			<haxe_doc>Tells if `this` List is empty.</haxe_doc>
+		</isEmpty>
+		<toString public="1" set="method" line="177">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>Returns a string representation of `this` List.
+
+		The result is enclosed in { } with the individual elements being
+		separated by a comma.</haxe_doc>
+		</toString>
+		<new public="1" set="method" line="44">
+			<f a=""><x path="Void"/></f>
+			<haxe_doc>Creates a new empty list.</haxe_doc>
+		</new>
+		<haxe_doc>A linked-list of elements. The list is composed of element container objects
+	that are chained together. It is optimized so that adding or removing an
+	element does not imply copying the whole list content every time.
+
+	@see https://haxe.org/manual/std-List.html</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="haxe.ds._List.ListNode" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
+		<item public="1"><c path="haxe.ds._List.ListNode.T"/></item>
+		<next public="1"><c path="haxe.ds._List.ListNode"><c path="haxe.ds._List.ListNode.T"/></c></next>
+		<new public="1" set="method" line="266"><f a="item:next">
+	<c path="haxe.ds._List.ListNode.T"/>
+	<c path="haxe.ds._List.ListNode"><c path="haxe.ds._List.ListNode.T"/></c>
+	<x path="Void"/>
+</f></new>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<abstract path="haxe.ds.Map" params="K:V" file="/usr/share/haxe/std/haxe/ds/Map.hx">
+		<from>
+			<icast field="fromStringMap"><c path="haxe.ds.StringMap"><c path="fromStringMap.V"/></c></icast>
+			<icast field="fromIntMap"><c path="haxe.ds.IntMap"><c path="fromIntMap.V"/></c></icast>
+			<icast field="fromObjectMap"><c path="haxe.ds.ObjectMap">
+	<c path="fromObjectMap.K"/>
+	<c path="fromObjectMap.V"/>
+</c></icast>
+		</from>
+		<this><c path="haxe.IMap">
+	<c path="haxe.ds.Map.K"/>
+	<c path="haxe.ds.Map.V"/>
+</c></this>
+		<to>
+			<icast field="toStringMap"><c path="haxe.ds.StringMap"><c path="toStringMap.V"/></c></icast>
+			<icast field="toIntMap"><c path="haxe.ds.IntMap"><c path="toIntMap.V"/></c></icast>
+			<icast field="toEnumValueMapMap"><c path="haxe.ds.EnumValueMap">
+	<c path="toEnumValueMapMap.K"/>
+	<c path="toEnumValueMapMap.V"/>
+</c></icast>
+			<icast field="toObjectMap"><c path="haxe.ds.ObjectMap">
+	<c path="toObjectMap.K"/>
+	<c path="toObjectMap.V"/>
+</c></icast>
+		</to>
+		<haxe_doc><![CDATA[Map allows key to value mapping for arbitrary value types, and many key
+	types.
+
+	This is a multi-type abstract, it is instantiated as one of its
+	specialization types depending on its type parameters.
+
+	A Map can be instantiated without explicit type parameters. Type inference
+	will then determine the type parameters from the usage.
+
+	Maps can also be created with `[key1 => value1, key2 => value2]` syntax.
+
+	Map is an abstract type, it is not available at runtime.
+
+	@see https://haxe.org/manual/std-Map.html]]></haxe_doc>
+		<meta>
+			<m n=":transitive"/>
+			<m n=":multiType"><e>@:followWithAbstracts K</e></m>
+		</meta>
+		<impl><class path="haxe.ds._Map.Map_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/Map.hx" private="1" module="haxe.ds.Map" final="1"><meta><m n=":keep"/></meta></class></impl>
+	</abstract>
+	<class path="haxe.ds.ObjectMap" params="K:V" file="/usr/share/haxe/std/js/_std/haxe/ds/ObjectMap.hx">
+		<implements path="haxe.IMap">
+			<c path="haxe.ds.ObjectMap.K"/>
+			<c path="haxe.ds.ObjectMap.V"/>
+		</implements>
+		<count static="1"><x path="Int"/></count>
+		<h><a><__keys__><a/></__keys__></a></h>
+		<set public="1" set="method" line="52">
+			<f a="key:value">
+				<c path="haxe.ds.ObjectMap.K"/>
+				<c path="haxe.ds.ObjectMap.V"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>See `Map.set`</haxe_doc>
+		</set>
+		<get public="1" get="inline" set="null" line="61">
+			<f a="key">
+				<c path="haxe.ds.ObjectMap.K"/>
+				<x path="Null"><c path="haxe.ds.ObjectMap.V"/></x>
+			</f>
+			<meta><m n=":has_untyped"/></meta>
+			<haxe_doc>See `Map.get`</haxe_doc>
+		</get>
+		<new public="1" set="method" line="48">
+			<f a=""><x path="Void"/></f>
+			<haxe_doc>Creates a new ObjectMap.</haxe_doc>
+		</new>
+		<haxe_doc>ObjectMap allows mapping of object keys to arbitrary values.
+
+	On static targets, the keys are considered to be strong references. Refer
+	to `haxe.ds.WeakMap` for a weak reference version.
+
+	See `Map` for documentation details.
+
+	@see https://haxe.org/manual/std-Map.html</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+			<m n=":coreApi"/>
+		</meta>
+	</class>
+	<abstract path="haxe.ds.ReadOnlyArray" params="T" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx">
+		<from><icast><c path="Array"><c path="haxe.ds.ReadOnlyArray.T"/></c></icast></from>
+		<this><c path="Array"><c path="haxe.ds.ReadOnlyArray.T"/></c></this>
+		<to><icast><t path="Iterable"><c path="haxe.ds.ReadOnlyArray.T"/></t></icast></to>
+		<haxe_doc>`ReadOnlyArray` is an abstract over an ordinary `Array` which only exposes
+	APIs that don't modify the instance, hence "read-only".
+
+	Note that this doesn't necessarily mean that the instance is *immutable*.
+	Other code holding a reference to the underlying `Array` can still modify it,
+	and the reference can be obtained with a `cast`.</haxe_doc>
+		<meta><m n=":forward">
+	<e>copy</e>
+	<e>filter</e>
+	<e>indexOf</e>
+	<e>iterator</e>
+	<e>keyValueIterator</e>
+	<e>join</e>
+	<e>lastIndexOf</e>
+	<e>map</e>
+	<e>slice</e>
+	<e>contains</e>
+	<e>toString</e>
+</m></meta>
+		<impl><class path="haxe.ds._ReadOnlyArray.ReadOnlyArray_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx" private="1" module="haxe.ds.ReadOnlyArray" final="1"><meta><m n=":keep"/></meta></class></impl>
+	</abstract>
+	<class path="haxe.ds.StringMap" params="T" file="/usr/share/haxe/std/js/_std/haxe/ds/StringMap.hx">
+		<implements path="haxe.IMap">
+			<c path="String"/>
+			<c path="haxe.ds.StringMap.T"/>
+		</implements>
+		<stringify set="method" line="89" static="1">
+			<f a="h">
+				<d/>
+				<c path="String"/>
+			</f>
+			<meta><m n=":analyzer"><e>no_optimize</e></m></meta>
+		</stringify>
+		<h><d/></h>
+		<get public="1" get="inline" set="null" line="41">
+			<f a="key">
+				<c path="String"/>
+				<x path="Null"><c path="haxe.ds.StringMap.T"/></x>
+			</f>
+			<haxe_doc>See `Map.get`</haxe_doc>
+		</get>
+		<new public="1" get="inline" set="null" line="33">
+			<f a=""><x path="Void"/></f>
+			<haxe_doc>Creates a new StringMap.</haxe_doc>
+		</new>
+		<haxe_doc>StringMap allows mapping of String keys to arbitrary values.
+
+	See `Map` for documentation details.
+
+	@see https://haxe.org/manual/std-Map.html</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+			<m n=":coreApi"/>
+		</meta>
+	</class>
+	<typedef path="haxe.ds._Vector.VectorData" params="T" file="/usr/share/haxe/std/haxe/ds/Vector.hx" private="1" module="haxe.ds.Vector"><c path="Array"><c path="haxe.ds._Vector.VectorData.T"/></c></typedef>
+	<abstract path="haxe.ds.Vector" params="T" file="/usr/share/haxe/std/haxe/ds/Vector.hx">
+		<this><t path="haxe.ds._Vector.VectorData"><c path="haxe.ds.Vector.T"/></t></this>
+		<haxe_doc>A Vector is a storage of fixed size. It can be faster than Array on some
+	targets, and is never slower.
+
+	@see https://haxe.org/manual/std-vector.html</haxe_doc>
+		<impl><class path="haxe.ds._Vector.Vector_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/Vector.hx" private="1" module="haxe.ds.Vector" final="1"><meta><m n=":keep"/></meta></class></impl>
+	</abstract>
+	<class path="haxe.exceptions.PosException" params="" file="/usr/share/haxe/std/haxe/exceptions/PosException.hx">
+		<extends path="haxe.Exception"/>
+		<posInfos final="1" public="1">
+			<t path="haxe.PosInfos"/>
+			<haxe_doc>Position where this exception was created.</haxe_doc>
+		</posInfos>
+		<toString public="1" set="method" line="24" override="1">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>Returns exception message.</haxe_doc>
+		</toString>
+		<new public="1" set="method" line="12"><f a="message:?previous:?pos">
+	<c path="String"/>
+	<c path="haxe.Exception"/>
+	<x path="Null"><t path="haxe.PosInfos"/></x>
+	<x path="Void"/>
+</f></new>
+		<haxe_doc>An exception that carry position information of a place where it was created.</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="haxe.exceptions.NotImplementedException" params="" file="/usr/share/haxe/std/haxe/exceptions/NotImplementedException.hx">
+		<extends path="haxe.exceptions.PosException"/>
+		<new public="1" set="method" line="7">
+			<f a="?message:?previous:?pos" v="&quot;Not implemented&quot;::">
+				<c path="String"/>
+				<c path="haxe.Exception"/>
+				<x path="Null"><t path="haxe.PosInfos"/></x>
+				<x path="Void"/>
+			</f>
+			<meta><m n=":value"><e>{ message : "Not implemented" }</e></m></meta>
+		</new>
+		<haxe_doc>An exception that is thrown when requested function or operation does not have an implementation.</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<abstract path="haxe.extern.EitherType" params="T1:T2" file="/usr/share/haxe/std/haxe/extern/EitherType.hx">
+		<from>
+			<icast><c path="haxe.extern.EitherType.T1"/></icast>
+			<icast><c path="haxe.extern.EitherType.T2"/></icast>
+		</from>
+		<this><d/></this>
+		<to>
+			<icast><c path="haxe.extern.EitherType.T1"/></icast>
+			<icast><c path="haxe.extern.EitherType.T2"/></icast>
+		</to>
+		<haxe_doc><![CDATA[An abstract type allowing values to be either of `T1` or `T2` type.
+	Supports implicit casts from/to either types.
+
+	It is useful for interfacing with external code on dynamic platforms
+	such as JavaScript or Python.
+
+	Otherwise, use of this type is discouraged.
+
+	@see <https://haxe.org/manual/lf-externs.html>]]></haxe_doc>
+		<meta><m n=":transitive"/></meta>
+		<impl><class path="haxe.extern._EitherType.EitherType_Impl_" params="" file="/usr/share/haxe/std/haxe/extern/EitherType.hx" private="1" module="haxe.extern.EitherType" final="1"><meta><m n=":keep"/></meta></class></impl>
+	</abstract>
+	<typedef path="haxe.extern.Rest" params="T" file="/usr/share/haxe/std/haxe/extern/Rest.hx">
+		<x path="haxe.Rest"><c path="haxe.extern.Rest.T"/></x>
+		<haxe_doc><![CDATA[DEPRECATED: use haxe.Rest instead.
+	
+	A special type that represents "rest" function argument.
+	Should be used as a type for the last argument of an extern method,
+	representing that arbitrary number of arguments of given type can be
+	passed to that method.
+	@see <https://haxe.org/manual/lf-externs.html>]]></haxe_doc>
+	</typedef>
+	<typedef path="haxe.io.ArrayBufferViewData" params="" file="/usr/share/haxe/std/js/_std/haxe/io/ArrayBufferView.hx" module="haxe.io.ArrayBufferView"><c path="js.lib.ArrayBufferView"/></typedef>
+	<abstract path="haxe.io.ArrayBufferView" params="" file="/usr/share/haxe/std/js/_std/haxe/io/ArrayBufferView.hx">
+		<this><t path="haxe.io.ArrayBufferViewData"/></this>
+		<impl><class path="haxe.io._ArrayBufferView.ArrayBufferView_Impl_" params="" file="/usr/share/haxe/std/js/_std/haxe/io/ArrayBufferView.hx" private="1" module="haxe.io.ArrayBufferView" final="1"><meta><m n=":keep"/></meta></class></impl>
+	</abstract>
+	<typedef path="haxe.io.BytesData" params="" file="/usr/share/haxe/std/haxe/io/BytesData.hx"><c path="js.lib.ArrayBuffer"/></typedef>
+	<enum path="haxe.io.Error" params="" file="/usr/share/haxe/std/haxe/io/Error.hx">
+		<Blocked><haxe_doc>The IO is set into nonblocking mode and some data cannot be read or written</haxe_doc></Blocked>
+		<Overflow><haxe_doc>An integer value is outside its allowed range</haxe_doc></Overflow>
+		<OutsideBounds><haxe_doc>An operation on Bytes is outside of its valid range</haxe_doc></OutsideBounds>
+		<Custom a="e">
+			<d/>
+			<haxe_doc>Other errors</haxe_doc>
+		</Custom>
+		<haxe_doc>The possible IO errors that can occur</haxe_doc>
+		<meta><m n=":directlyUsed"/></meta>
+	</enum>
+	<class path="haxe.io.Path" params="" file="/usr/share/haxe/std/haxe/io/Path.hx">
+		<join public="1" set="method" line="189" static="1">
+			<f a="paths">
+				<c path="Array"><c path="String"/></c>
+				<c path="String"/>
+			</f>
+			<haxe_doc>Joins all paths in `paths` together.
+
+		If `paths` is empty, the empty String `""` is returned. Otherwise the
+		paths are joined with a slash between them.
+
+		If `paths` is `null`, the result is unspecified.</haxe_doc>
+		</join>
+		<normalize public="1" set="method" line="210" static="1">
+			<f a="path">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>Normalize a given `path` (e.g. turn `'/usr/local/../lib'` into `'/usr/lib'`).
+
+		Also replaces backslashes `\` with slashes `/` and afterwards turns
+		multiple slashes into a single one.
+
+		If `path` is `null`, the result is unspecified.</haxe_doc>
+		</normalize>
+		<addTrailingSlash public="1" set="method" line="271" static="1">
+			<f a="path">
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>Adds a trailing slash to `path`, if it does not have one already.
+
+		If the last slash in `path` is a backslash, a backslash is appended to
+		`path`.
+
+		If the last slash in `path` is a slash, or if no slash is found, a slash
+		is appended to `path`. In particular, this applies to the empty String
+		`""`.
+
+		If `path` is `null`, the result is unspecified.</haxe_doc>
+		</addTrailingSlash>
+		<haxe_doc>This class provides a convenient way of working with paths. It supports the
+	common path formats:
+
+	- `directory1/directory2/filename.extension`
+	- `directory1\directory2\filename.extension`</haxe_doc>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<typedef path="haxe.io.UInt8ArrayData" params="" file="/usr/share/haxe/std/js/_std/haxe/io/UInt8Array.hx" module="haxe.io.UInt8Array"><c path="js.lib.Uint8Array"/></typedef>
+	<abstract path="haxe.io.UInt8Array" params="" file="/usr/share/haxe/std/js/_std/haxe/io/UInt8Array.hx">
+		<this><t path="haxe.io.UInt8ArrayData"/></this>
+		<meta><m n=":coreApi"/></meta>
+		<impl><class path="haxe.io._UInt8Array.UInt8Array_Impl_" params="" file="/usr/share/haxe/std/js/_std/haxe/io/UInt8Array.hx" private="1" module="haxe.io.UInt8Array" final="1"><meta>
+	<m n=":keep"/>
+	<m n=":coreApi"/>
+</meta></class></impl>
+	</abstract>
+	<typedef path="haxe.macro.Position" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<min>
+				<x path="Int"/>
+				<haxe_doc>Position of the first character.</haxe_doc>
+			</min>
+			<max>
+				<x path="Int"/>
+				<haxe_doc>Position of the last character.</haxe_doc>
+			</max>
+			<file>
+				<c path="String"/>
+				<haxe_doc>Reference to the filename.</haxe_doc>
+			</file>
+		</a>
+		<haxe_doc>Represents a position in a file.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Expr" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx">
+		<a>
+			<pos>
+				<t path="haxe.macro.Position"/>
+				<haxe_doc>The position of the expression.</haxe_doc>
+			</pos>
+			<expr>
+				<e path="haxe.macro.ExprDef"/>
+				<haxe_doc>The expression kind.</haxe_doc>
+			</expr>
+		</a>
+		<haxe_doc>Represents a node in the AST.
+	@see https://haxe.org/manual/macro-reification-expression.html</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.ExprOf" params="T" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<t path="haxe.macro.Expr"/>
+		<haxe_doc>Represents a AST node identical to `Expr`, but it allows constraining the
+	type of accepted expressions.
+	@see https://haxe.org/manual/macro-ExprOf.html</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Case" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<values>
+				<c path="Array"><t path="haxe.macro.Expr"/></c>
+				<haxe_doc>The value expressions of the case.</haxe_doc>
+			</values>
+			<guard>
+				<x path="Null"><t path="haxe.macro.Expr"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional guard expressions of the case, if available.</haxe_doc>
+			</guard>
+			<expr>
+				<x path="Null"><t path="haxe.macro.Expr"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The expression of the case, if available.</haxe_doc>
+			</expr>
+		</a>
+		<haxe_doc>Represents a switch case.
+	@see https://haxe.org/manual/expression-switch.html</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Var" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<type>
+				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The type-hint of the variable, if available.</haxe_doc>
+			</type>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the variable.</haxe_doc>
+			</name>
+			<meta>
+				<x path="Null"><t path="haxe.macro.Metadata"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>Metadata associatied with the variable, if available.</haxe_doc>
+			</meta>
+			<isFinal>
+				<x path="Null"><x path="Bool"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>Whether or not the variable can be assigned to.</haxe_doc>
+			</isFinal>
+			<expr>
+				<x path="Null"><t path="haxe.macro.Expr"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The expression of the variable, if available.</haxe_doc>
+			</expr>
+		</a>
+		<haxe_doc>Represents a variable in the AST.
+	@see https://haxe.org/manual/expression-var.html</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Catch" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<type>
+				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The type of the catch.</haxe_doc>
+			</type>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the catch variable.</haxe_doc>
+			</name>
+			<expr>
+				<t path="haxe.macro.Expr"/>
+				<haxe_doc>The expression of the catch.</haxe_doc>
+			</expr>
+		</a>
+		<haxe_doc>Represents a catch in the AST.
+	@see https://haxe.org/manual/expression-try-catch.html</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.ObjectField" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<quotes>
+				<x path="Null"><e path="haxe.macro.QuoteStatus"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>How the field name is quoted.</haxe_doc>
+			</quotes>
+			<field>
+				<c path="String"/>
+				<haxe_doc>The name of the field.</haxe_doc>
+			</field>
+			<expr>
+				<t path="haxe.macro.Expr"/>
+				<haxe_doc>The field expression.</haxe_doc>
+			</expr>
+		</a>
+		<haxe_doc>Represents the field of an object declaration.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.TypePath" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<sub>
+				<x path="Null"><c path="String"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>Sub is set on module sub-type access:
+		`pack.Module.Type` has `name = "Module"`, `sub = "Type"`, if available.</haxe_doc>
+			</sub>
+			<params>
+				<x path="Null"><c path="Array"><e path="haxe.macro.TypeParam"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>Optional parameters of the type path.</haxe_doc>
+			</params>
+			<pack>
+				<c path="Array"><c path="String"/></c>
+				<haxe_doc>Represents the package of the type path.</haxe_doc>
+			</pack>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the type path.</haxe_doc>
+			</name>
+		</a>
+		<haxe_doc>Represents a type path in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.TypeParamDecl" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<params>
+				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional parameters of the type parameter.</haxe_doc>
+			</params>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the type parameter.</haxe_doc>
+			</name>
+			<meta>
+				<x path="Null"><t path="haxe.macro.Metadata"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The metadata of the type parameter.</haxe_doc>
+			</meta>
+			<constraints>
+				<x path="Null"><c path="Array"><e path="haxe.macro.ComplexType"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional constraints of the type parameter.</haxe_doc>
+			</constraints>
+		</a>
+		<haxe_doc>Represents a type parameter declaration in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Function" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<ret>
+				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The return type-hint of the function, if available.</haxe_doc>
+			</ret>
+			<params>
+				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>An optional list of function parameter type declarations.</haxe_doc>
+			</params>
+			<expr>
+				<x path="Null"><t path="haxe.macro.Expr"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The expression of the function body, if available.</haxe_doc>
+			</expr>
+			<args>
+				<c path="Array"><t path="haxe.macro.FunctionArg"/></c>
+				<haxe_doc>A list of function arguments.</haxe_doc>
+			</args>
+		</a>
+		<haxe_doc>Represents a function in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.FunctionArg" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<value>
+				<x path="Null"><t path="haxe.macro.Expr"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional value of the function argument, if available.</haxe_doc>
+			</value>
+			<type>
+				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The type-hint of the function argument, if available.</haxe_doc>
+			</type>
+			<opt>
+				<x path="Null"><x path="Bool"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>Whether or not the function argument is optional.</haxe_doc>
+			</opt>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the function argument.</haxe_doc>
+			</name>
+			<meta>
+				<x path="Null"><t path="haxe.macro.Metadata"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The metadata of the function argument.</haxe_doc>
+			</meta>
+		</a>
+		<haxe_doc>Represents a function argument in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.MetadataEntry" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<pos>
+				<t path="haxe.macro.Position"/>
+				<haxe_doc>The position of the metadata entry.</haxe_doc>
+			</pos>
+			<params>
+				<x path="Null"><c path="Array"><t path="haxe.macro.Expr"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional parameters of the metadata entry.</haxe_doc>
+			</params>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the metadata entry.</haxe_doc>
+			</name>
+		</a>
+		<haxe_doc>Represents a metadata entry in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Metadata" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<c path="Array"><t path="haxe.macro.MetadataEntry"/></c>
+		<haxe_doc>Represents metadata in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.Field" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<pos>
+				<t path="haxe.macro.Position"/>
+				<haxe_doc>The position of the field.</haxe_doc>
+			</pos>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the field.</haxe_doc>
+			</name>
+			<meta>
+				<x path="Null"><t path="haxe.macro.Metadata"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional metadata of the field.</haxe_doc>
+			</meta>
+			<kind>
+				<e path="haxe.macro.FieldType"/>
+				<haxe_doc>The kind of the field.</haxe_doc>
+			</kind>
+			<doc>
+				<x path="Null"><c path="String"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The documentation of the field, if available. If the field has no
+		documentation, the value is `null`.</haxe_doc>
+			</doc>
+			<access>
+				<x path="Null"><c path="Array"><e path="haxe.macro.Access"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The access modifiers of the field. By default fields have private access.
+		@see https://haxe.org/manual/class-field-access-modifier.html</haxe_doc>
+			</access>
+		</a>
+		<haxe_doc>Represents a field in the AST.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.TypeDefinition" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<pos>
+				<t path="haxe.macro.Position"/>
+				<haxe_doc>The position to the type definition.</haxe_doc>
+			</pos>
+			<params>
+				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The parameter type declarations of the type definition.</haxe_doc>
+			</params>
+			<pack>
+				<c path="Array"><c path="String"/></c>
+				<haxe_doc>The package of the type definition.</haxe_doc>
+			</pack>
+			<name>
+				<c path="String"/>
+				<haxe_doc>The name of the type definition.</haxe_doc>
+			</name>
+			<meta>
+				<x path="Null"><t path="haxe.macro.Metadata"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The optional metadata of the type definition.</haxe_doc>
+			</meta>
+			<kind>
+				<e path="haxe.macro.TypeDefKind"/>
+				<haxe_doc>The kind of the type definition.</haxe_doc>
+			</kind>
+			<isExtern>
+				<x path="Null"><x path="Bool"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>Whether or not the type is extern.</haxe_doc>
+			</isExtern>
+			<fields>
+				<c path="Array"><t path="haxe.macro.Field"/></c>
+				<haxe_doc>The fields of the type definition.</haxe_doc>
+			</fields>
+			<doc>
+				<x path="Null"><c path="String"/></x>
+				<meta><m n=":optional"/></meta>
+				<haxe_doc>The documentation of the type, if available. If the type has no
+		documentation, the value is `null`.</haxe_doc>
+			</doc>
+		</a>
+		<haxe_doc>Represents a type definition.</haxe_doc>
+	</typedef>
+	<typedef path="haxe.macro.ImportExpr" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+		<a>
+			<path>
+				<c path="Array"><a>
+	<pos><t path="haxe.macro.Position"/></pos>
+	<name><c path="String"/></name>
+</a></c>
+				<haxe_doc>The path to the import expression.</haxe_doc>
+			</path>
+			<mode>
+				<e path="haxe.macro.ImportMode"/>
+				<haxe_doc>The mode of the import expression.</haxe_doc>
+			</mode>
+		</a>
+		<haxe_doc>Represents the import expression.</haxe_doc>
+	</typedef>
+	<class path="js.Boot" params="" file="/usr/share/haxe/std/js/Boot.hx">
+		<__string_rec set="method" line="58" static="1">
+			<f a="o:s">
+				<a>
+					<toString set="null"><f a=""><c path="String"/></f></toString>
+					<length set="null"><x path="Int"/></length>
+					<hasOwnProperty set="null"><f a="">
+	<c path="String"/>
+	<x path="Bool"/>
+</f></hasOwnProperty>
+					<_hx_index set="null"><x path="Int"/></_hx_index>
+					<__enum__ set="null"><x path="Bool"/></__enum__>
+				</a>
+				<c path="String"/>
+				<c path="String"/>
+			</f>
+			<meta>
+				<m n=":has_untyped"/>
+				<m n=":ifFeature"><e>"has_enum"</e></m>
+			</meta>
+		</__string_rec>
+		<__toStr static="1"><c path="js.lib.Function"/></__toStr>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+			<m n=":dox"><e>hide</e></m>
+		</meta>
+	</class>
+	<class path="js.lib.ArrayBuffer" params="" file="/usr/share/haxe/std/js/lib/ArrayBuffer.hx" extern="1">
+		<isView public="1" set="method" static="1"><f a="value">
+	<d/>
+	<x path="Bool"/>
+</f></isView>
+		<byteLength final="1" public="1"><x path="Int"/></byteLength>
+		<slice public="1" set="method"><f a="begin:?end">
+	<x path="Int"/>
+	<x path="Int"/>
+	<c path="js.lib.ArrayBuffer"/>
+</f></slice>
+		<new public="1" set="method">
+			<f a="length">
+				<x path="Int"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>@throws DOMError</haxe_doc>
+		</new>
+		<meta>
+			<m n=":directlyUsed"/>
+			<m n=":native"><e>"ArrayBuffer"</e></m>
+		</meta>
 	</class>
 	<class path="js.lib.DataView" params="" file="/usr/share/haxe/std/js/lib/DataView.hx" extern="1">
 		<implements path="js.lib.ArrayBufferView"/>
@@ -16133,13 +16488,13 @@
 			<e path="lib.bases.GenerateMode"/>
 			<meta><m n=":value"><e>LiveGeneration</e></m></meta>
 		</GenerateMode>
-		<GenerateHTML abstract="1" public="1" set="method">
-			<f a=""><x path="Null"><c path="String"/></x></f>
-			<haxe_doc>Optional HTML Generation
-    @returns (?String)</haxe_doc>
-		</GenerateHTML>
+		<GenerateHTMLPerHTTPParameter abstract="1" public="1" set="method"><f a="req:res">
+	<c path="js.node.http.IncomingMessage"/>
+	<c path="js.node.http.ServerResponse"/>
+	<x path="Null"><c path="String"/></x>
+</f></GenerateHTMLPerHTTPParameter>
 		<WriteToDisk abstract="1" public="1" set="method"><f a=""><x path="Void"/></f></WriteToDisk>
-		<new public="1" set="method" line="18"><f a=""><x path="Void"/></f></new>
+		<new public="1" set="method" line="19"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":keep"/></meta>
 	</class>
 	<class path="lib.bases.BasePage" params="" file="lib/bases/BasePage.hx">
@@ -16148,36 +16503,45 @@
 			<c path="Array"><c path="String"/></c>
 			<meta><m n=":value"><e><![CDATA[["<meta charset=\"UTF-8\">", "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">", "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"]]]></e></m></meta>
 		</HTMLHeader>
-		<GenerateHTML public="1" set="method" line="40" override="1"><f a=""><x path="Null"><c path="String"/></x></f></GenerateHTML>
-		<WriteToDisk public="1" set="method" line="51" override="1">
-			<f a=""><x path="Void"/></f>
-			<haxe_doc>Filename and path is based of FilePath</haxe_doc>
-		</WriteToDisk>
-		<match public="1" set="method" line="77" override="1"><f a="pathRequested">
+		<GenerateHTML public="1" set="method" line="42"><f a=""><x path="Null"><c path="String"/></x></f></GenerateHTML>
+		<match public="1" set="method" line="46" override="1"><f a="pathRequested">
 	<c path="String"/>
 	<x path="Bool"/>
 </f></match>
-		<new public="1" set="method" line="33"><f a=""><x path="Void"/></f></new>
+		<GenerateHTMLPerHTTPParameter public="1" set="method" line="49" override="1"><f a="req:res">
+	<c path="js.node.http.IncomingMessage"/>
+	<c path="js.node.http.ServerResponse"/>
+	<x path="Null"><c path="String"/></x>
+</f></GenerateHTMLPerHTTPParameter>
+		<GenerateHTMLPerParameter public="1" set="method" line="56"><f a="parameterObj">
+	<c path="lib.bases.ParameterObj"/>
+	<x path="Null"><c path="String"/></x>
+</f></GenerateHTMLPerParameter>
+		<WriteToDisk public="1" set="method" line="61" override="1">
+			<f a=""><x path="Void"/></f>
+			<haxe_doc>Filename and path is based of FilePath</haxe_doc>
+		</WriteToDisk>
+		<new public="1" set="method" line="35"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":keep"/></meta>
 	</class>
 	<class path="lib.bases.StaticFileGeneratedPage" params="" file="lib/bases/BasePage.hx" module="lib.bases.BasePage">
 		<extends path="lib.bases.BasePage"/>
-		<GenerateHTML public="1" set="method" line="83" override="1"><f a=""><c path="String"/></f></GenerateHTML>
-		<GenerateTemplate public="1" set="method" line="105"><f a=""><c path="haxe.Template"/></f></GenerateTemplate>
-		<ReadTemplateFromDisk public="1" set="method" line="115"><f a=""><c path="String"/></f></ReadTemplateFromDisk>
-		<new public="1" set="method" line="82"><f a=""><x path="Void"/></f></new>
+		<GenerateHTML public="1" set="method" line="91" override="1"><f a=""><c path="String"/></f></GenerateHTML>
+		<GenerateTemplate public="1" set="method" line="113"><f a=""><c path="haxe.Template"/></f></GenerateTemplate>
+		<ReadTemplateFromDisk public="1" set="method" line="123"><f a=""><c path="String"/></f></ReadTemplateFromDisk>
+		<new public="1" set="method" line="90"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":keep"/></meta>
 	</class>
 	<class path="lib.bases.IAPI" params="" file="lib/bases/BasePage.hx" module="lib.bases.BasePage" interface="1"><meta><m n=":keep"/></meta></class>
 	<class path="lib.bases.ApiPage" params="" file="lib/bases/BasePage.hx" module="lib.bases.BasePage">
 		<extends path="lib.bases.StaticFileGeneratedPage"/>
 		<implements path="lib.bases.IAPI"/>
-		<GenerateHTML public="1" set="method" line="134" override="1"><f a=""><c path="String"/></f></GenerateHTML>
+		<GenerateHTML public="1" set="method" line="142" override="1"><f a=""><c path="String"/></f></GenerateHTML>
 		<APIPath public="1"><t path="Map">
 	<c path="String"/>
 	<c path="String"/>
 </t></APIPath>
-		<GatherData public="1" set="method" line="158"><f a=""><x path="Void"/></f></GatherData>
+		<GatherData public="1" set="method" line="166"><f a=""><x path="Void"/></f></GatherData>
 		<Data public="1" expr="new Map&lt;String,Any&gt;()">
 			<t path="Map">
 				<c path="String"/>
@@ -16185,7 +16549,7 @@
 			</t>
 			<meta><m n=":value"><e><![CDATA[new Map<String,Any>()]]></e></m></meta>
 		</Data>
-		<new public="1" set="method" line="128"><f a=""><x path="Void"/></f></new>
+		<new public="1" set="method" line="136"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":keep"/></meta>
 	</class>
 	<enum path="lib.bases.GenerateMode" params="" file="lib/bases/BasePage.hx" module="lib.bases.BasePage">
@@ -16202,6 +16566,39 @@
 			<m n=":flatEnum"/>
 		</meta>
 	</enum>
+	<class path="lib.bases.ParameterObj" params="" file="lib/bases/BasePage.hx" module="lib.bases.BasePage">
+		<RequestPath public="1" expr="&quot;&quot;">
+			<c path="String"/>
+			<meta><m n=":value"><e>""</e></m></meta>
+		</RequestPath>
+		<req public="1"><x path="Null"><c path="js.node.http.IncomingMessage"/></x></req>
+		<res public="1"><x path="Null"><c path="js.node.http.ServerResponse"/></x></res>
+		<new public="1" set="method" line="242"><f a="requestPath">
+	<c path="String"/>
+	<x path="Void"/>
+</f></new>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="pages.BlogPage" params="" file="pages/BlogPage.hx">
+		<extends path="lib.bases.ApiPage"/>
+		<ReadTemplateFromDisk public="1" set="method" line="27" override="1"><f a=""><c path="String"/></f></ReadTemplateFromDisk>
+		<GenerateHTMLPerParameter public="1" set="method" line="31" override="1"><f a="paremeterObj">
+	<c path="lib.bases.ParameterObj"/>
+	<x path="Null"><c path="String"/></x>
+</f></GenerateHTMLPerParameter>
+		<match public="1" set="method" line="38" override="1"><f a="pathRequested">
+	<c path="String"/>
+	<x path="Bool"/>
+</f></match>
+		<new public="1" set="method" line="12"><f a=""><x path="Void"/></f></new>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
 	<class path="pages.IndexPage" params="" file="pages/IndexPage.hx">
 		<extends path="lib.bases.ApiPage"/>
 		<match public="1" set="method" line="35" override="1"><f a="pathRequested">
@@ -16209,6 +16606,60 @@
 	<x path="Bool"/>
 </f></match>
 		<new public="1" set="method" line="10"><f a=""><x path="Void"/></f></new>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="util.Database" params="" file="util/Database.hx">
+		<databasecontent expr="new Map&lt;String,String&gt;()">
+			<t path="Map">
+				<c path="String"/>
+				<c path="String"/>
+			</t>
+			<meta><m n=":value"><e><![CDATA[new Map<String,String>()]]></e></m></meta>
+		</databasecontent>
+		<Filepath public="1"><c path="String"/></Filepath>
+		<connect public="1" set="method" line="16"><f a="filename">
+	<c path="String"/>
+	<x path="Void"/>
+</f></connect>
+		<get public="1" set="method" line="36"><f a="name">
+	<c path="String"/>
+	<c path="String"/>
+</f></get>
+		<parseDatabase public="1" set="method" line="41"><f a="data">
+	<c path="String"/>
+	<t path="Map">
+		<c path="String"/>
+		<c path="String"/>
+	</t>
+</f></parseDatabase>
+		<stringifyDatabase public="1" set="method" line="55"><f a="data">
+	<t path="Map">
+		<c path="String"/>
+		<c path="String"/>
+	</t>
+	<c path="String"/>
+</f></stringifyDatabase>
+		<save public="1" set="method" line="64"><f a=""><x path="Void"/></f></save>
+		<load public="1" set="method" line="68"><f a=""><x path="Void"/></f></load>
+		<new public="1" set="method" line="13"><f a=""><x path="Void"/></f></new>
+		<meta>
+			<m n=":keep"/>
+			<m n=":directlyUsed"/>
+		</meta>
+	</class>
+	<class path="util.File" params="" file="util/File.hx">
+		<WriteFile public="1" set="method" line="4" static="1"><f a="path:content">
+	<c path="String"/>
+	<c path="String"/>
+	<x path="Void"/>
+</f></WriteFile>
+		<ReadOrCreateFile public="1" set="method" line="24" static="1"><f a="path">
+	<c path="String"/>
+	<c path="String"/>
+</f></ReadOrCreateFile>
 		<meta>
 			<m n=":keep"/>
 			<m n=":directlyUsed"/>

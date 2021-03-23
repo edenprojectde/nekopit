@@ -1,0 +1,19 @@
+<html>
+  <head>
+    ::foreach headers::
+      ::__current__::
+    ::end::
+  </head>
+  <body>
+    <div>
+      <p>Hello Blogtempl!</p><br>
+      <ul>
+
+      </ul> <br>
+      <ul>
+
+      </ul><br>
+      ::data::
+    </div>
+  </body>
+</html>

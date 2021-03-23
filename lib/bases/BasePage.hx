@@ -1,5 +1,7 @@
 package lib.bases;
 
+import js.node.http.IncomingMessage;
+import js.node.http.ServerResponse;
 import util.Routing.IRoutingMatchable;
 import haxe.Exception;
 import util.Minimize;
@@ -8,7 +10,6 @@ import util.Request;
 
 abstract class AbstractPage implements IRoutingMatchable {
   public var DynamicPath: String;
-  
   public var BasePath = ".";
   public var FilePath: Null<String>;
   public var Template="<div>Empty</div>";
@@ -21,11 +22,12 @@ abstract class AbstractPage implements IRoutingMatchable {
     @returns (?String)
   **/
   public abstract function GenerateHTML() : Null<String>;
+  public abstract function GenerateHTMLPerHTTPParameter(req: IncomingMessage, res:ServerResponse) : Null<String>;
+  public abstract function GenerateHTMLPerParameter(parameterObj:ParameterObj) : Null<String>;
   /**
     Template into Template Object
   **/
   public abstract function GenerateTemplate(): Template;
-
   public abstract function WriteToDisk(): Void;
 }
 
@@ -37,13 +39,21 @@ class BasePage extends AbstractPage {
     '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
   ];
 
-	public function GenerateHTML():Null<String> {
-    throw new haxe.exceptions.NotImplementedException();
+	public function GenerateHTML():Null<String> { throw new haxe.exceptions.NotImplementedException();	}
+	public function GenerateTemplate():Template {	throw new haxe.exceptions.NotImplementedException();
 	}
 
-	public function GenerateTemplate():Template {
-		throw new haxe.exceptions.NotImplementedException();
-	}
+  public function match(pathRequested:String):Bool { throw new haxe.exceptions.NotImplementedException();	}
+
+	public function GenerateHTMLPerHTTPParameter(req:IncomingMessage, res:ServerResponse) : Null<String> 
+    { var parameterObj = new ParameterObj(req.url);
+      parameterObj.req=req;
+      parameterObj.res=res;
+      return this.GenerateHTMLPerParameter(
+                  parameterObj
+                ); }
+  public function GenerateHTMLPerParameter(parameterObj:ParameterObj) : Null<String> 
+    { return this.GenerateHTML(); }
 
   /**
     Filename and path is based of FilePath
@@ -74,9 +84,7 @@ class BasePage extends AbstractPage {
     #end
   }
 
-	public function match(pathRequested:String):Bool {
-		throw new haxe.exceptions.NotImplementedException();
-	}
+	
 }
 
 class StaticFileGeneratedPage extends BasePage{
@@ -199,6 +207,13 @@ class BaseBackEndPiece extends AbstractPage {
 	public function match(pathRequested:String):Bool {
 		throw new haxe.exceptions.NotImplementedException();
 	}
+
+	public function GenerateHTMLPerHTTPParameter(req:IncomingMessage, res:ServerResponse):Null<String> {
+		return this.GenerateHTML();
+	}
+  public function GenerateHTMLPerParameter(parameterObj:ParameterObj) : Null<String> {
+    return this.GenerateHTML();
+  }
 }
 
 interface IAPI {
@@ -218,4 +233,13 @@ enum GenerateMode {
   LiveGeneration;
   GenerateSingleton;
   GenerateMultiton;
+}
+
+class ParameterObj {
+  public var RequestPath ="";
+  public var req:Null<IncomingMessage>;
+  public var res:Null<ServerResponse>;
+  public function new(requestPath) {
+    this.RequestPath=requestPath;
+  }
 }

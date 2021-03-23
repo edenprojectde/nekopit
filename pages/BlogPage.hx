@@ -1,5 +1,7 @@
 package pages;
 
+import js.node.http.IncomingMessage;
+import js.node.http.ServerResponse;
 import pieces.DebugPiece;
 import haxe.Serializer;
 import util.Minimize;
@@ -9,11 +11,9 @@ import lib.bases.BasePage;
 class BlogPage extends ApiPage {
   public function new() {
     this.APIPath = [
-      "People" => "https://jsonware.com/json/16658074778e770dfccbc51d64f134a2.json",
-      "Places" =>"https://jsonware.com/json/16658074778e770dfccbc51d64f134a2.json"
     ];
     
-    TemplateFile = "./pages/Index.mtt";
+    TemplateFile = "./pages/Blog.mtt";
 
     #if js
     DynamicPath = "/blog/:slug";
@@ -23,16 +23,20 @@ class BlogPage extends ApiPage {
     super();
 
   }
-	//override public function GenerateTemplate() : haxe.Template {
-  //  var templ = new haxe.Template(
-  //    /* <!--html--> */" 
-  //    Test
-  //    "/* <!--!html--> */);
-  //    
-  //  return templ;
-  //}
+
+  override function ReadTemplateFromDisk():String {
+    return super.ReadTemplateFromDisk();
+  }
+
+  override public function GenerateHTMLPerParameter(paremeterObj:ParameterObj):Null<String> {
+    if(paremeterObj.res != null){
+      paremeterObj.res.statusCode=200;}
+    this.Data.set("path",paremeterObj.RequestPath);
+    return this.GenerateHTML();
+  }
 
   override function match(pathRequested:String):Bool {
-    return pathRequested == DynamicPath || pathRequested == FilePath;
+    trace((~/\/blog/).match(pathRequested));
+    return (~/\/blog/).match(pathRequested);
   }
 }
