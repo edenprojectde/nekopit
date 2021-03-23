@@ -10,4 +10,25 @@ class File {
       
     #end
   }
+
+  public static function ReadFile(path: String): String {
+    #if js
+
+      var fs: Dynamic = js.Lib.require('fs-extra');
+      return fs.readFileSync(path,"utf8").toString();
+
+      
+    #end
+  }
+
+  public static function ReadOrCreateFile(path: String): String {
+    #if js
+
+      var fs: Dynamic = js.Lib.require('fs-extra');
+      fs.ensureFileSync(path);
+      return fs.readFileSync(path,"utf8").toString();
+
+      
+    #end
+  }
 }
